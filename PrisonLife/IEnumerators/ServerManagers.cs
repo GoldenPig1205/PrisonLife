@@ -7,6 +7,8 @@ using System.Threading.Tasks;
 using Exiled.API.Features;
 using MEC;
 
+using static PrisonLife.Variables.Server;
+
 namespace PrisonLife.IEnumerators
 {
     public static class ServerManagers
@@ -18,6 +20,16 @@ namespace PrisonLife.IEnumerators
                 Log.Info("heartbeat sent");
 
                 yield return Timing.WaitForSeconds(30);
+            }
+        }
+
+        public static IEnumerator<float> ClearChatCooldown()
+        {
+            while (true)
+            {
+                ChatCooldown.Clear();
+
+                yield return Timing.WaitForSeconds(1);
             }
         }
     }

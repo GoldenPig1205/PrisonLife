@@ -11,6 +11,7 @@ using CustomRendering;
 using Discord;
 using Exiled.API.Features;
 using Exiled.Events.Commands.Reload;
+using MapEditorReborn.API.Features.Objects;
 using MEC;
 using MultiBroadcast.API;
 using PlayerRoles;
@@ -144,6 +145,14 @@ namespace PrisonLife.API.Features
             }
 
             return points;
+        }
+
+        public static void ChangeBackground(float intensity, string color)
+        {
+            Tools.GetObjectList("[L] Base").ForEach(x => x.GetComponent<Light>().intensity = intensity);
+
+            Color formattedColor = ColorUtility.TryParseHtmlString(color, out Color parsedColor) ? parsedColor : Color.white;
+            Tools.GetObjectList("[BG] SkyBlock").ForEach(x => x.GetComponent<PrimitiveObject>().Primitive.Color = formattedColor);
         }
     }
 }

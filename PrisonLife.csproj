@@ -2,6 +2,7 @@
 <Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
+    <LangVersion>9.0</LangVersion>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProjectGuid>{56C68CAC-BA33-49A4-B4B0-18209A5EAAE6}</ProjectGuid>
@@ -122,13 +123,16 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="API\Components\ShowTime.cs" />
     <Compile Include="API\DataBases\Datas.cs" />
     <Compile Include="API\DataBases\Translators.cs" />
+    <Compile Include="API\Enums\Timestamp.cs" />
     <Compile Include="API\Features\Tools.cs" />
     <Compile Include="Discord\Command.cs" />
     <Compile Include="Discord\Webhook.cs" />
     <Compile Include="PrisonLife\Commands\Client\Basic\Chat.cs" />
     <Compile Include="PrisonLife\Commands\RemoteAdmin\Basic\UpdateMap.cs" />
+    <Compile Include="PrisonLife\EventHandlers\Map.cs" />
     <Compile Include="PrisonLife\EventHandlers\Player.cs" />
     <Compile Include="PrisonLife\EventHandlers\Server.cs" />
     <Compile Include="PrisonLife\Configs\Config.cs" />
@@ -138,6 +142,8 @@
     <Compile Include="PrisonLife\Variables\Server.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="PrisonLife\Patches\" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

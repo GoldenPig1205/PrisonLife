@@ -10,5 +10,6 @@ namespace PrisonLife.Variables
     public static class Server
     {
         public static List<Player> ChatCooldown = new List<Player>();
+        public static List<Player> MeleeCooldown = new List<Player>();
     }
 }
