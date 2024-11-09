@@ -3,12 +3,20 @@
   "WorkspaceRootPath": "D:\\GoldenPig1205\\Visual Studio 2022\\PrisonLife\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{56C68CAC-BA33-49A4-B4B0-18209A5EAAE6}|PrisonLife.csproj|d:\\goldenpig1205\\visual studio 2022\\prisonlife\\plugin.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{56C68CAC-BA33-49A4-B4B0-18209A5EAAE6}|PrisonLife.csproj|solutionrelative:plugin.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{56C68CAC-BA33-49A4-B4B0-18209A5EAAE6}|PrisonLife.csproj|d:\\goldenpig1205\\visual studio 2022\\prisonlife\\prisonlife\\commands\\remoteadmin\\basic\\updatemap.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{56C68CAC-BA33-49A4-B4B0-18209A5EAAE6}|PrisonLife.csproj|solutionrelative:prisonlife\\commands\\remoteadmin\\basic\\updatemap.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{56C68CAC-BA33-49A4-B4B0-18209A5EAAE6}|PrisonLife.csproj|d:\\goldenpig1205\\visual studio 2022\\prisonlife\\configs\\config.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{56C68CAC-BA33-49A4-B4B0-18209A5EAAE6}|PrisonLife.csproj|solutionrelative:configs\\config.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{56C68CAC-BA33-49A4-B4B0-18209A5EAAE6}|PrisonLife.csproj|d:\\goldenpig1205\\visual studio 2022\\prisonlife\\prisonlife\\eventhandlers\\player.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{56C68CAC-BA33-49A4-B4B0-18209A5EAAE6}|PrisonLife.csproj|solutionrelative:prisonlife\\eventhandlers\\player.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{56C68CAC-BA33-49A4-B4B0-18209A5EAAE6}|PrisonLife.csproj|D:\\GoldenPig1205\\Visual Studio 2022\\PrisonLife\\prisonlife\\eventhandlers\\server.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{56C68CAC-BA33-49A4-B4B0-18209A5EAAE6}|PrisonLife.csproj|solutionrelative:prisonlife\\eventhandlers\\server.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{56C68CAC-BA33-49A4-B4B0-18209A5EAAE6}|PrisonLife.csproj|D:\\GoldenPig1205\\Visual Studio 2022\\PrisonLife\\plugin.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{56C68CAC-BA33-49A4-B4B0-18209A5EAAE6}|PrisonLife.csproj|solutionrelative:plugin.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     }
   ],
   "DocumentGroupContainers": [
@@ -27,27 +35,53 @@
             {
               "$type": "Document",
               "DocumentIndex": 0,
-              "Title": "Plugin.cs",
-              "DocumentMoniker": "D:\\GoldenPig1205\\Visual Studio 2022\\PrisonLife\\Plugin.cs",
-              "RelativeDocumentMoniker": "Plugin.cs",
-              "ToolTip": "D:\\GoldenPig1205\\Visual Studio 2022\\PrisonLife\\Plugin.cs*",
-              "RelativeToolTip": "Plugin.cs*",
-              "ViewState": "AgIAAAAAAAAAAAAAAADwvxwAAAAJAAAAAAAAAA==",
+              "Title": "UpdateMap.cs",
+              "DocumentMoniker": "D:\\GoldenPig1205\\Visual Studio 2022\\PrisonLife\\PrisonLife\\Commands\\RemoteAdmin\\Basic\\UpdateMap.cs",
+              "RelativeDocumentMoniker": "PrisonLife\\Commands\\RemoteAdmin\\Basic\\UpdateMap.cs",
+              "ToolTip": "D:\\GoldenPig1205\\Visual Studio 2022\\PrisonLife\\PrisonLife\\Commands\\RemoteAdmin\\Basic\\UpdateMap.cs*",
+              "RelativeToolTip": "PrisonLife\\Commands\\RemoteAdmin\\Basic\\UpdateMap.cs*",
+              "ViewState": "AgIAAAsAAAAAAAAAAAAcwBcAAAAJAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-11-06T08:52:00.09Z",
+              "WhenOpened": "2024-11-09T03:32:00.932Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
               "DocumentIndex": 1,
-              "Title": "Config.cs",
-              "DocumentMoniker": "D:\\GoldenPig1205\\Visual Studio 2022\\PrisonLife\\Configs\\Config.cs",
-              "RelativeDocumentMoniker": "Configs\\Config.cs",
-              "ToolTip": "D:\\GoldenPig1205\\Visual Studio 2022\\PrisonLife\\Configs\\Config.cs",
-              "RelativeToolTip": "Configs\\Config.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAsAAAAvAAAAAAAAAA==",
+              "Title": "Player.cs",
+              "DocumentMoniker": "D:\\GoldenPig1205\\Visual Studio 2022\\PrisonLife\\PrisonLife\\EventHandlers\\Player.cs",
+              "RelativeDocumentMoniker": "PrisonLife\\EventHandlers\\Player.cs",
+              "ToolTip": "D:\\GoldenPig1205\\Visual Studio 2022\\PrisonLife\\PrisonLife\\EventHandlers\\Player.cs",
+              "RelativeToolTip": "PrisonLife\\EventHandlers\\Player.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABIAAAAJAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-11-06T09:15:24.96Z",
+              "WhenOpened": "2024-11-08T15:48:19.167Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "Server.cs",
+              "DocumentMoniker": "D:\\GoldenPig1205\\Visual Studio 2022\\PrisonLife\\PrisonLife\\EventHandlers\\Server.cs",
+              "RelativeDocumentMoniker": "PrisonLife\\EventHandlers\\Server.cs",
+              "ToolTip": "D:\\GoldenPig1205\\Visual Studio 2022\\PrisonLife\\PrisonLife\\EventHandlers\\Server.cs",
+              "RelativeToolTip": "PrisonLife\\EventHandlers\\Server.cs",
+              "ViewState": "AgIAAAYAAAAAAAAAAADwvxAAAAApAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-11-08T15:45:58.273Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "Plugin.cs",
+              "DocumentMoniker": "D:\\GoldenPig1205\\Visual Studio 2022\\PrisonLife\\Plugin.cs",
+              "RelativeDocumentMoniker": "Plugin.cs",
+              "ToolTip": "D:\\GoldenPig1205\\Visual Studio 2022\\PrisonLife\\Plugin.cs",
+              "RelativeToolTip": "Plugin.cs",
+              "ViewState": "AgIAABEAAAAAAAAAAAAwwCsAAAAJAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-11-06T08:52:00.09Z",
               "EditorCaption": ""
             }
           ]

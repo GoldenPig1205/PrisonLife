@@ -11,5 +11,8 @@ namespace PrisonLife
     {
         public bool IsEnabled { get; set; } = true;
         public bool Debug { get; set; } = false;
+
+        public string WebhookURL { get; set; } = "webhookUrl";
+        public string BotAPIServer { get; set; } = "http://127.0.0.1:12050/";
     }
 }
