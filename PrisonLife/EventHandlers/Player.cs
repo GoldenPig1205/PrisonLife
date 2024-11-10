@@ -99,8 +99,9 @@ namespace PrisonLife.EventHandlers
                 {
                     MeleeCooldown.Add(ev.Player);
 
-                    // CustomDamageHandler cDH = new CustomDamageHandler(target, ev.Player, 12.05f, DamageType.Custom, "무지성으로 뚜드려 맞았습니다.");
-                    target.Hurt(12.05f, "무지성으로 뚜드려 맞았습니다.");
+                    target.Hurt(ev.Player, 12.05f, DamageType.Custom, null, "무지성으로 뚜드려 맞았습니다.");
+
+                    Hitmarker.SendHitmarkerDirectly(ev.Player.ReferenceHub, 0.5f);
 
                     Timing.CallDelayed(1, () =>
                     {
@@ -185,7 +186,7 @@ namespace PrisonLife.EventHandlers
                 ev.Pickup.Destroy();
         }
 
-        public static void OnHandcuffing(HandcuffingEventArgs ev)
+        public static IEnumerator<float> OnHandcuffing(HandcuffingEventArgs ev)
         {
             if (ev.Player.IsNTF && (ev.Target.Role.Type == RoleTypeId.Tutorial || ev.Target.Role.Type == RoleTypeId.ClassD))
             {
@@ -195,9 +196,10 @@ namespace PrisonLife.EventHandlers
                 {
                     ev.Target.ShowHint($"{6 - i}초 후 감옥으로 이송됩니다.", 1.2f);
 
-                    Timing.WaitForSeconds(1f);
+                    yield return Timing.WaitForSeconds(1f);
                 }
 
+                ev.Target.RemoveHandcuffs();
                 PrisonLife.Instance.SpawnPrison(ev.Target);
             }
         }
