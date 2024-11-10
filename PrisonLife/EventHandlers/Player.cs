@@ -150,7 +150,7 @@ namespace PrisonLife.EventHandlers
 
                             if (count > 2)
                             {
-                                ev.Attacker.CustomInfo = null;
+                                ev.Attacker.CustomInfo = "";
                                 ev.Attacker.Role.Set(RoleTypeId.ClassD, RoleSpawnFlags.None);
                                 ev.Attacker.Kill("무고한 죄수를 너무 많이 죽여버렸습니다.");
                             }
@@ -232,6 +232,7 @@ namespace PrisonLife.EventHandlers
                 }
 
                 ev.Target.RemoveHandcuffs();
+                ev.Target.ClearInventory();
                 PrisonLife.Instance.SpawnPrison(ev.Target);
             }
         }
