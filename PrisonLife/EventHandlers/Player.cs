@@ -148,7 +148,7 @@ namespace PrisonLife.EventHandlers
                             int count = int.Parse(ev.Attacker.CustomInfo.Split(':')[1].Trim());
                             ev.Attacker.CustomInfo = $"무고한 수감자 사살 횟수 : {count + 1}";
 
-                            if (count > 2)
+                            if (count > 1)
                             {
                                 ev.Attacker.CustomInfo = "";
                                 ev.Attacker.Role.Set(RoleTypeId.ClassD, RoleSpawnFlags.None);
