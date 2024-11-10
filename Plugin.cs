@@ -28,7 +28,7 @@ namespace PrisonLife
     {
         public override string Name => base.Name;
         public override string Author => "GoldenPig1205";
-        public override Version Version => new Version(1, 0, 3);
+        public override Version Version => new Version(1, 0, 4);
         public override Version RequiredExiledVersion => new Version(1, 2, 0, 5);
 
         public static PrisonLife Instance;
@@ -200,8 +200,8 @@ namespace PrisonLife
             }
             else
             {
-                player.Group.BadgeText = "수감자";
-                player.Group.BadgeColor = "orange";
+                player.RankName = "수감자";
+                player.RankColor = "orange";
             }
 
             Timing.CallDelayed(7, () =>
@@ -230,8 +230,8 @@ namespace PrisonLife
             }
             else
             {
-                player.Group.BadgeText = "교도관";
-                player.Group.BadgeColor = "silver";
+                player.RankName = "교도관";
+                player.RankColor = "silver";
             }
 
             Timing.CallDelayed(7, () =>
@@ -258,8 +258,8 @@ namespace PrisonLife
             }
             else
             {
-                player.Group.BadgeText = "범죄자";
-                player.Group.BadgeColor = "red";
+                player.RankName = "범죄자";
+                player.RankColor = "red";
             }
 
             Timing.CallDelayed(7, () =>
