@@ -28,7 +28,7 @@ namespace PrisonLife
     {
         public override string Name => base.Name;
         public override string Author => "GoldenPig1205";
-        public override Version Version => new Version(1, 0, 0);
+        public override Version Version => new Version(1, 0, 1);
         public override Version RequiredExiledVersion => new Version(1, 2, 0, 5);
 
         public static PrisonLife Instance;
@@ -61,6 +61,7 @@ namespace PrisonLife
             Exiled.Events.Handlers.Player.Hurting += OnHurting;
             Exiled.Events.Handlers.Player.Dying += OnDying;
             Exiled.Events.Handlers.Player.SearchingPickup += OnSearchingPickup;
+            Exiled.Events.Handlers.Player.Handcuffing += OnHandcuffing;
 
             Exiled.Events.Handlers.Map.PlacingBulletHole += OnPlacingBulletHole;
             Exiled.Events.Handlers.Map.PlacingBlood += OnPlacingBlood;
@@ -92,6 +93,7 @@ namespace PrisonLife
             Exiled.Events.Handlers.Player.Hurting -= OnHurting;
             Exiled.Events.Handlers.Player.Dying -= OnDying;
             Exiled.Events.Handlers.Player.SearchingPickup -= OnSearchingPickup;
+            Exiled.Events.Handlers.Player.Handcuffing -= OnHandcuffing;
 
             Exiled.Events.Handlers.Map.PlacingBulletHole -= OnPlacingBulletHole;
             Exiled.Events.Handlers.Map.PlacingBlood -= OnPlacingBlood;
@@ -191,8 +193,16 @@ namespace PrisonLife
 
             player.IsGodModeEnabled = true;
             player.IsBypassModeEnabled = false;
-            player.Group.BadgeText = "수감자";
-            player.Group.BadgeColor = "orange";
+
+            if (player.Group == null)
+            {
+                player.Group = new UserGroup { BadgeText = "수감자", BadgeColor = "orange" };
+            }
+            else
+            {
+                player.Group.BadgeText = "수감자";
+                player.Group.BadgeColor = "orange";
+            }
 
             Timing.CallDelayed(7, () =>
             {
@@ -213,8 +223,16 @@ namespace PrisonLife
 
             player.IsGodModeEnabled = true;
             player.IsBypassModeEnabled = true;
-            player.Group.BadgeText = "교도관";
-            player.Group.BadgeColor = "silver";
+
+            if (player.Group == null)
+            {
+                player.Group = new UserGroup { BadgeText = "교도관", BadgeColor = "silver" };
+            }
+            else
+            {
+                player.Group.BadgeText = "교도관";
+                player.Group.BadgeColor = "silver";
+            }
 
             Timing.CallDelayed(7, () =>
             {
@@ -233,8 +251,16 @@ namespace PrisonLife
 
             player.IsGodModeEnabled = true;
             player.IsBypassModeEnabled = false;
-            player.Group.BadgeText = "범죄자";
-            player.Group.BadgeColor = "red";
+
+            if (player.Group == null)
+            {
+                player.Group = new UserGroup { BadgeText = "범죄자", BadgeColor = "red" };
+            }
+            else
+            {
+                player.Group.BadgeText = "범죄자";
+                player.Group.BadgeColor = "red";
+            }
 
             Timing.CallDelayed(7, () =>
             {
