@@ -25,10 +25,10 @@ public class ShowTime : MonoBehaviour
         {
             foreach (var player in Player.List)
             {
-                player.RemoveBroadcast("ShowTime");
+                player.ClearBroadcasts();
                 player.AddBroadcast(1, $"<size=25><mark=#FFD700aa><color=#000000><b>{title}</b></color></mark></size>\n<size=20><u><mark=#000000aa>{description}</mark></u></size>\n<size=15>[{timeset}]</size>", tag: "ShowTime");
             }
-
+            
             current = timeset;
         }
     }

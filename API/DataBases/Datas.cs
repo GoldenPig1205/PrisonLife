@@ -43,11 +43,5 @@ namespace PrisonLife.API.DataBases
             {"army_green", "#4B5320"},
             {"pumpkin", "#EE7600"}
         };
-
-        public static List<LeadingTeam> BlockFFTeams = new List<LeadingTeam>()
-        {
-            LeadingTeam.FacilityForces,
-            LeadingTeam.Anomalies
-        };
     }
 }

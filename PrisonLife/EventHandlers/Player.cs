@@ -99,8 +99,8 @@ namespace PrisonLife.EventHandlers
                 {
                     MeleeCooldown.Add(ev.Player);
 
-                    CustomDamageHandler cDH = new CustomDamageHandler(target, ev.Player, 12.05f, DamageType.Custom, "무지성으로 뚜드려 맞았습니다.");
-                    target.Hurt(cDH);
+                    // CustomDamageHandler cDH = new CustomDamageHandler(target, ev.Player, 12.05f, DamageType.Custom, "무지성으로 뚜드려 맞았습니다.");
+                    target.Hurt(12.05f, "무지성으로 뚜드려 맞았습니다.");
 
                     Timing.CallDelayed(1, () =>
                     {
@@ -116,13 +116,10 @@ namespace PrisonLife.EventHandlers
             if (ev.Attacker == null)
                 return;
 
-            if (ev.Player.LeadingTeam == ev.Attacker.LeadingTeam)
+            if (ev.Player.Role.Team == ev.Attacker.Role.Team)
             {
-                if (Datas.BlockFFTeams.Contains(ev.Player.LeadingTeam))
-                {
+                if (!ev.Player.IsNTF)
                     ev.IsAllowed = false;
-                    return;
-                }
             }
 
             if (ev.DamageHandler.Type == DamageType.Jailbird)
@@ -176,10 +173,33 @@ namespace PrisonLife.EventHandlers
                     return;
             }
 
+            if (ev.Pickup.Type.ToString().Contains($"Armor"))
+            {
+                if (ev.Player.CountItem(ev.Pickup.Type) >= 1)
+                    return;
+            }
+
             ev.Player.AddItem(ev.Pickup.Type);
 
             if (!ev.Pickup.Base.name.Contains("[P]"))
                 ev.Pickup.Destroy();
+        }
+
+        public static void OnHandcuffing(HandcuffingEventArgs ev)
+        {
+            if (ev.Player.IsNTF && (ev.Target.Role.Type == RoleTypeId.Tutorial || ev.Target.Role.Type == RoleTypeId.ClassD))
+            {
+                ev.Target.EnableEffect(EffectType.Ensnared);
+
+                for (int i = 1; i < 6; i++)
+                {
+                    ev.Target.ShowHint($"{6 - i}초 후 감옥으로 이송됩니다.", 1.2f);
+
+                    Timing.WaitForSeconds(1f);
+                }
+
+                PrisonLife.Instance.SpawnPrison(ev.Target);
+            }
         }
     }
 }

@@ -41,34 +41,41 @@ namespace PrisonLife.IEnumerators
         {
             while (true)
             {
-                foreach (var player in Player.List)
+                try
                 {
-                    if (Physics.Raycast(player.Position, Vector3.down, out RaycastHit hit, 1, (LayerMask)1))
+                    foreach (var player in Player.List.Where(x => x.IsAlive))
                     {
-                        if (player.Role.Type == RoleTypeId.Scientist)
+                        if (Physics.Raycast(player.Position, Vector3.down, out RaycastHit hit, 1, (LayerMask)1))
                         {
-                            switch (hit.transform.name)
+                            if (player.Role.Type == RoleTypeId.Scientist)
                             {
-                                case "[SR] Prison":
-                                    player.Role.Set(RoleTypeId.ClassD, RoleSpawnFlags.None);
-                                    player.Kill($"수감자를 선택하셨습니다. 행운을 빕니다.");
-                                    break;
+                                switch (hit.transform.name)
+                                {
+                                    case "[SR] Prison":
+                                        player.Role.Set(RoleTypeId.ClassD, RoleSpawnFlags.None);
+                                        player.Kill($"수감자를 선택하셨습니다. 행운을 빕니다.");
+                                        break;
 
-                                case "[SR] Jailor":
-                                    player.Role.Set(RoleTypeId.FacilityGuard, RoleSpawnFlags.None);
-                                    player.Kill($"교도관을 선택하셨습니다. 행운을 빕니다.");
-                                    break;
+                                    case "[SR] Jailor":
+                                        player.Role.Set(RoleTypeId.FacilityGuard, RoleSpawnFlags.None);
+                                        player.Kill($"교도관을 선택하셨습니다. 행운을 빕니다.");
+                                        break;
+                                }
                             }
-                        }
 
-                        if (player.Role.Type == RoleTypeId.ClassD)
-                        {
-                            if (hit.transform.name == "[SP] Free")
+                            if (player.Role.Type == RoleTypeId.ClassD)
                             {
-                                PrisonLife.Instance.SpawnFree(player);
+                                if (hit.transform.name == "[SP] Free")
+                                {
+                                    PrisonLife.Instance.SpawnFree(player);
+                                }
                             }
                         }
                     }
+                }
+                catch (Exception e)
+                {
+                    Log.Error(e);
                 }
 
                 yield return Timing.WaitForOneFrame;
@@ -79,17 +86,24 @@ namespace PrisonLife.IEnumerators
         {
             while (true)
             {
-                foreach (var player in Player.List.Where(x => x.IsGodModeEnabled))
+                try
                 {
-                    PrimitiveSerializable sphere = new PrimitiveSerializable(PrimitiveType.Sphere, "58ACFAaa", PrimitiveFlags.Visible);
-                    PrimitiveObject god = ObjectSpawner.SpawnPrimitive(sphere);
-                    god.Position = player.Position;
-                    god.Scale = new Vector3(3, 3, 3);
-
-                    Timing.CallDelayed(Timing.WaitForOneFrame, () =>
+                    foreach (var player in Player.List.Where(x => x.IsAlive && x.IsGodModeEnabled))
                     {
-                        god.Destroy();
-                    });
+                        if (player.Position != null)
+                        {
+                            SchematicObject shield = ObjectSpawner.SpawnSchematic("Shield", player.Position, new Quaternion(0, 0, 0, 0), new Vector3(1, 1, 1), null, false);
+
+                            Timing.CallDelayed(Timing.WaitForOneFrame, () =>
+                            {
+                                shield.Destroy();
+                            });
+                        }
+                    }
+                }
+                catch (Exception e)
+                {
+                    Log.Error(e);
                 }
 
                 yield return Timing.WaitForOneFrame;
