@@ -29,5 +29,16 @@ namespace PrisonLife.EventHandlers
         {
             ev.IsAllowed = false;
         }
+
+        public static void OnPickupAdded(PickupAddedEventArgs ev)
+        {
+            if (ev.Pickup.Base.name.Contains($"[P]") || ev.Pickup.Base.name.Contains($"[O]"))
+                return;
+
+            Timing.CallDelayed(10, () =>
+            {
+                ev.Pickup.UnSpawn();
+            });
+        }
     }
 }

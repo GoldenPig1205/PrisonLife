@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -15,7 +16,9 @@ using InventorySystem.Items.Firearms.Ammo;
 using MapEditorReborn.API.Features;
 using MEC;
 using PlayerRoles;
+using PrisonLife.API.DataBases;
 using PrisonLife.API.Features;
+using UnityEngine;
 
 using static PrisonLife.Variables.Server;
 
@@ -23,37 +26,37 @@ namespace PrisonLife.EventHandlers
 {
     public static class PlayerEvent
     {
-        public static void OnVerified(VerifiedEventArgs ev)
+        public static IEnumerator<float> OnVerified(VerifiedEventArgs ev)
         {
-            ev.Player.Role.Set(RoleTypeId.ClassD);
+            ev.Player.Role.Set(RoleTypeId.Scientist);
+
+            ev.Player.ClearInventory();
+
+            ev.Player.EnableEffect(EffectType.Invisible);
             ev.Player.Position = Tools.GetObject("[SP] Lobby").position;
+            ev.Player.Group.BadgeText = "중립";
+            ev.Player.Group.BadgeColor = "white";
+
+            ev.Player.ShowHint($"<b><size=40><size=50>[<color=#A4A4A4>교도관</color>]</size>\n<mark=#A4A4A4aa>수감자들을 잘 감시하세요. 불법 반입 물품 압수, 폭동 진압, 무엇보다도 탈옥 시도를 저지해야 합니다. 하지만 감옥을 위협하는 것이 죄수뿐만은 아니라는 것, 명심하세요.</mark>\n\n" +
+                $"<size=50>[<color=#FF8000>수감자</color>]</size>\n<mark=#FF8000aa>가석방이 없는 종신형을 받은 무고한 시민인 당신, 어떤 희망도 미래도 보이지 않습니다. 지금 당신은 갈림길에 서있습니다. 평생 추운 감옥에 갇혀 의미 없는 나날을 보낼 것인가, 아니면 탈옥할 것인가...</mark></size></b>\n\n\n" +
+                $"<color=#A4A4A4>교도관</color>으로 플레이하려면 <mark=#0080FFaa><color=#000000>파란색 발판</color></mark>을,\n<color=#FF8000>수감자</color>로 플레이하려면 <mark=#FF8000aa><color=#000000>주황색 발판</color></mark>을 밟으십시오.\n\n\n\n\n\n\n\n\n\n", 10000);
+
+            while (true)
+            {
+                if (ev.Player.Role.Type != RoleTypeId.Scientist)
+                {
+                    ev.Player.ShowHint("", 1);
+                    break;
+                }
+
+                yield return Timing.WaitForOneFrame;
+            }
         }
 
         public static void OnSpawned(SpawnedEventArgs ev)
         {
             ev.Player.EnableEffect(EffectType.SoundtrackMute);
             ev.Player.EnableEffect(EffectType.FogControl);
-        }
-
-        public static void OnDroppedItem(DroppedItemEventArgs ev)
-        {
-            Timing.CallDelayed(10, () =>
-            {
-                ev.Pickup.UnSpawn();
-            });
-        }
-
-        public static void OnDroppingAmmo(DroppingAmmoEventArgs ev)
-        {
-            ev.IsAllowed = false;
-
-            List<AmmoPickup> ammos = ev.Player.Inventory.ServerDropAmmo(ev.AmmoType.GetItemType(), ev.Amount, false);
-
-            Timing.CallDelayed(10, () =>
-            {
-                foreach (AmmoPickup ammo in ammos)
-                    ammo.DestroySelf();
-            });
         }
 
         public static void OnSpawnedRagdoll(SpawnedRagdollEventArgs ev)
@@ -76,7 +79,8 @@ namespace PrisonLife.EventHandlers
 
                         DoorVariant.AllDoors.Where(x => x.DoorId == ev.Door.Base.DoorId).FirstOrDefault().ServerInteract(ev.Player.ReferenceHub, 1);
 
-                        ev.Player.IsBypassModeEnabled = false;
+                        if (!ev.Player.IsNTF)
+                            ev.Player.IsBypassModeEnabled = false;
                     }
                 });
             } 
@@ -105,6 +109,77 @@ namespace PrisonLife.EventHandlers
                     });
                 }
             }
+        }
+
+        public static void OnHurting(HurtingEventArgs ev)
+        {
+            if (ev.Attacker == null)
+                return;
+
+            if (ev.Player.LeadingTeam == ev.Attacker.LeadingTeam)
+            {
+                if (Datas.BlockFFTeams.Contains(ev.Player.LeadingTeam))
+                {
+                    ev.IsAllowed = false;
+                    return;
+                }
+            }
+
+            if (ev.DamageHandler.Type == DamageType.Jailbird)
+                ev.DamageHandler.Damage = 20;
+        }
+
+        public static IEnumerator<float> OnDying(DyingEventArgs ev)
+        {
+            RoleTypeId roleTypeId = ev.Player.Role.Type;
+
+            if (ev.Player.IsNTF)
+            {
+                if (UnityEngine.Random.Range(1, 4) == 1)
+                {
+                    Item keycard = ev.Player.AddItem(ItemType.KeycardMTFPrivate);
+                    ev.Player.DropItem(keycard);
+                }
+            }
+
+            for (int i = 1; i < 6; i++)
+            {
+                ev.Player.ShowHint($"{6 - i}초 후 부활합니다.", 1.2f);
+
+                yield return Timing.WaitForSeconds(1f);
+            }
+
+            switch (roleTypeId)
+            {
+                case RoleTypeId.ClassD:
+                    PrisonLife.Instance.SpawnPrison(ev.Player);
+                    break;
+
+                case RoleTypeId.FacilityGuard:
+                    PrisonLife.Instance.SpawnJailor(ev.Player);
+                    break;
+
+                case RoleTypeId.Tutorial:
+                    PrisonLife.Instance.SpawnFree(ev.Player);
+                    break;
+            }
+        }
+
+        public static void OnSearchingPickup(SearchingPickupEventArgs ev)
+        {
+            if (ev.Pickup.Base.name.Contains("[O]"))
+                return;
+
+            if (ev.Pickup.Type.ToString().Contains($"Ammo"))
+            {
+                if (ev.Player.CountItem(ev.Pickup.Type) > 11)
+                    return;
+            }
+
+            ev.Player.AddItem(ev.Pickup.Type);
+
+            if (!ev.Pickup.Base.name.Contains("[P]"))
+                ev.Pickup.Destroy();
         }
     }
 }

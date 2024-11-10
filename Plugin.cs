@@ -11,9 +11,16 @@ using static PrisonLife.Variables.Protocol;
 using static PrisonLife.EventHandlers.ServerEvent;
 using static PrisonLife.EventHandlers.PlayerEvent;
 using static PrisonLife.EventHandlers.MapEvent;
+using static PrisonLife.EventHandlers.ItemEvent;
 
 using static PrisonLife.IEnumerators.ServerManagers;
+
 using UnityEngine;
+using PrisonLife.API.Features;
+using PlayerRoles;
+using MapEditorReborn.API.Features;
+using Exiled.API.Features.Doors;
+using Exiled.API.Enums;
 
 namespace PrisonLife
 {
@@ -30,6 +37,8 @@ namespace PrisonLife
 
         CoroutineHandle _sendHeartBeat;
         CoroutineHandle _clearChatCooldown;
+        CoroutineHandle _setRole;
+        CoroutineHandle _godModeManager;
 
         public override void OnEnabled()
         {
@@ -45,18 +54,24 @@ namespace PrisonLife
 
             Exiled.Events.Handlers.Player.Verified += OnVerified;
             Exiled.Events.Handlers.Player.Spawned += OnSpawned;
-            Exiled.Events.Handlers.Player.DroppedItem += OnDroppedItem;
-            Exiled.Events.Handlers.Player.DroppingAmmo += OnDroppingAmmo;
             Exiled.Events.Handlers.Player.SpawnedRagdoll += OnSpawnedRagdoll;
             Exiled.Events.Handlers.Player.InteractingDoor += OnInteractingDoor;
             Exiled.Events.Handlers.Player.DamagingDoor += OnDamagingDoor;
             Exiled.Events.Handlers.Player.TogglingNoClip += OnTogglingNoClip;
+            Exiled.Events.Handlers.Player.Hurting += OnHurting;
+            Exiled.Events.Handlers.Player.Dying += OnDying;
+            Exiled.Events.Handlers.Player.SearchingPickup += OnSearchingPickup;
 
             Exiled.Events.Handlers.Map.PlacingBulletHole += OnPlacingBulletHole;
             Exiled.Events.Handlers.Map.PlacingBlood += OnPlacingBlood;
+            Exiled.Events.Handlers.Map.PickupAdded += OnPickupAdded;
+
+            Exiled.Events.Handlers.Item.Swinging += OnSwinging;
 
             _sendHeartBeat = Timing.RunCoroutine(SendHeartbeat());
             _clearChatCooldown = Timing.RunCoroutine(ClearChatCooldown());
+            _setRole = Timing.RunCoroutine(SetRole());
+            _godModeManager = Timing.RunCoroutine(GodModeManager());
         }
 
         public override void OnDisabled()
@@ -70,38 +85,69 @@ namespace PrisonLife
 
             Exiled.Events.Handlers.Player.Verified -= OnVerified;
             Exiled.Events.Handlers.Player.Spawned -= OnSpawned;
-            Exiled.Events.Handlers.Player.DroppedItem -= OnDroppedItem;
-            Exiled.Events.Handlers.Player.DroppingAmmo -= OnDroppingAmmo;
             Exiled.Events.Handlers.Player.SpawnedRagdoll -= OnSpawnedRagdoll;
             Exiled.Events.Handlers.Player.InteractingDoor -= OnInteractingDoor;
             Exiled.Events.Handlers.Player.DamagingDoor -= OnDamagingDoor;
             Exiled.Events.Handlers.Player.TogglingNoClip -= OnTogglingNoClip;
+            Exiled.Events.Handlers.Player.Hurting -= OnHurting;
+            Exiled.Events.Handlers.Player.Dying -= OnDying;
+            Exiled.Events.Handlers.Player.SearchingPickup -= OnSearchingPickup;
 
             Exiled.Events.Handlers.Map.PlacingBulletHole -= OnPlacingBulletHole;
             Exiled.Events.Handlers.Map.PlacingBlood -= OnPlacingBlood;
+            Exiled.Events.Handlers.Map.PickupAdded -= OnPickupAdded;
+
+            Exiled.Events.Handlers.Item.Swinging -= OnSwinging;
 
             Timing.KillCoroutines(_sendHeartBeat);
             Timing.KillCoroutines(_clearChatCooldown);
+            Timing.KillCoroutines(_setRole);
+            Timing.KillCoroutines(_godModeManager);
         }
 
         public void OnTimeChanged(Timestamp NewTimestamp)
         {
             void notice(string note)
             {
-                Player.List.ToList().ForEach(x => x.ShowHint($"<size=40><mark=#000000aa><b>감옥 방송</b>\n{note}</mark>\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", 5));
+                foreach (var player in Player.List.Where(x => x.Role.Type != RoleTypeId.Scientist))
+                    player.ShowHint($"<size=40><mark=#000000aa><b>감옥 방송</b>\n{note}</mark>\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", 5);
             }
 
             switch (NewTimestamp)
             {
                 case Timestamp.lights_out:
+                    foreach (var door in Door.List)
+                    {
+                        if (door.Base.DoorId >= 204 && door.Base.DoorId <= 219)
+                            door.Lock(99999, DoorLockType.SpecialDoorFeature);
+                    }
+
+                    foreach (var door in Door.List)
+                    {
+                        if (door.Base.DoorId >= 189 && door.Base.DoorId <= 190)
+                            door.Lock(99999, DoorLockType.SpecialDoorFeature);
+                    }
+
                     notice("모든 수감자는 반드시 각자 방에 있어야 합니다.");
                     break;
 
                 case Timestamp.breakfast:
+                    foreach (var door in Door.List)
+                    {
+                        if (door.Base.DoorId >= 204 && door.Base.DoorId <= 219)
+                            door.Unlock();
+                    }
+
                     notice("아침 식사 시간입니다. 급식소에서 아침 식사를 제공 받으십시오.");
                     break;
 
                 case Timestamp.yardtime:
+                    foreach (var door in Door.List)
+                    {
+                        if (door.Base.DoorId >= 189 && door.Base.DoorId <= 190)
+                            door.Unlock();
+                    }
+
                     notice("여러분, 운동 시간입니다. 운동장으로 가세요.");
                     break;
 
@@ -110,17 +156,90 @@ namespace PrisonLife
                     break;
 
                 case Timestamp.freetime:
+                    foreach (var door in Door.List)
+                    {
+                        if (door.Base.DoorId >= 189 && door.Base.DoorId <= 190)
+                            door.Unlock();
+                    }
+
                     notice("수감자들을 위한 자유 시간입니다.");
                     break;
 
                 case Timestamp.dinner:
+
                     notice("모든 수감자는 급식소에서 저녁 식사를 해야 합니다.");
                     break;
 
                 case Timestamp.lockdown:
+                    foreach (var door in Door.List)
+                    {
+                        if (door.Base.DoorId >= 189 && door.Base.DoorId <= 190)
+                            door.Lock(99999, DoorLockType.SpecialDoorFeature);
+                    }
+
                     notice("수감자는 문을 잠그기 위해 각자 방으로 돌아가야 합니다.");
                     break;
             }
+        }
+
+        public void SpawnPrison(Player player)
+        {
+            player.Role.Set(RoleTypeId.ClassD, RoleSpawnFlags.None);
+
+            Vector3 pos = Tools.GetRandomValue(Tools.GetObjectList("[SP] Prison")).transform.position;
+            player.Position = new Vector3(pos.x, pos.y + 2, pos.z);
+
+            player.IsGodModeEnabled = true;
+            player.IsBypassModeEnabled = false;
+            player.Group.BadgeText = "수감자";
+            player.Group.BadgeColor = "orange";
+
+            Timing.CallDelayed(7, () =>
+            {
+                player.IsGodModeEnabled = false;
+            });
+        }
+
+        public void SpawnJailor(Player player)
+        {
+            player.Role.Set(RoleTypeId.FacilityGuard, RoleSpawnFlags.None);
+
+            player.ClearInventory();
+            player.AddItem(ItemType.GunCOM15);
+            player.AddItem(ItemType.Ammo9x19);
+
+            Vector3 pos = Tools.GetRandomValue(Tools.GetObjectList("[SP] Jailor")).transform.position;
+            player.Position = new Vector3(pos.x, pos.y + 2, pos.z);
+
+            player.IsGodModeEnabled = true;
+            player.IsBypassModeEnabled = true;
+            player.Group.BadgeText = "교도관";
+            player.Group.BadgeColor = "silver";
+
+            Timing.CallDelayed(7, () =>
+            {
+                player.IsGodModeEnabled = false;
+            });
+        }
+
+        public void SpawnFree(Player player)
+        {
+            player.Role.Set(RoleTypeId.Tutorial, RoleSpawnFlags.None);
+
+            player.ClearInventory();
+
+            Vector3 pos = Tools.GetRandomValue(Tools.GetObjectList("[SP] Free")).transform.position;
+            player.Position = new Vector3(pos.x, pos.y + 2, pos.z);
+
+            player.IsGodModeEnabled = true;
+            player.IsBypassModeEnabled = false;
+            player.Group.BadgeText = "범죄자";
+            player.Group.BadgeColor = "red";
+
+            Timing.CallDelayed(7, () =>
+            {
+                player.IsGodModeEnabled = false;
+            });
         }
     }
 }

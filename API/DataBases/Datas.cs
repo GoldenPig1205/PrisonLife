@@ -1,4 +1,6 @@
-﻿using System;
+﻿using Exiled.API.Enums;
+using PlayerRoles;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -40,6 +42,12 @@ namespace PrisonLife.API.DataBases
             {"mint", "#98FB98"},
             {"army_green", "#4B5320"},
             {"pumpkin", "#EE7600"}
+        };
+
+        public static List<LeadingTeam> BlockFFTeams = new List<LeadingTeam>()
+        {
+            LeadingTeam.FacilityForces,
+            LeadingTeam.Anomalies
         };
     }
 }

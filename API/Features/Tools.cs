@@ -102,6 +102,20 @@ namespace PrisonLife.API.Features
             return false;
         }
 
+        public static bool TryGetLookHit(Player player, float Distance, out RaycastHit raycastHit)
+        {
+            raycastHit = new RaycastHit();
+
+            if (Physics.Raycast(player.ReferenceHub.PlayerCameraReference.position + player.ReferenceHub.PlayerCameraReference.forward * 0.2f, player.ReferenceHub.PlayerCameraReference.forward, out RaycastHit hit, Distance, InventorySystem.Items.Firearms.Modules.StandardHitregBase.HitregMask))
+            {
+                raycastHit = hit;
+
+                return true;
+            }
+
+            return false;
+        }
+
         public static Player SpawnDJ(string name, RoleTypeId roleTypeId, Vector3 position, string sn = null)
         {
             ReferenceHub dj = GGUtils.Gtool.Spawn(roleTypeId, position);

@@ -131,7 +131,7 @@
     <Compile Include="Discord\Command.cs" />
     <Compile Include="Discord\Webhook.cs" />
     <Compile Include="PrisonLife\Commands\Client\Basic\Chat.cs" />
-    <Compile Include="PrisonLife\Commands\RemoteAdmin\Basic\UpdateMap.cs" />
+    <Compile Include="PrisonLife\EventHandlers\Item.cs" />
     <Compile Include="PrisonLife\EventHandlers\Map.cs" />
     <Compile Include="PrisonLife\EventHandlers\Player.cs" />
     <Compile Include="PrisonLife\EventHandlers\Server.cs" />
@@ -143,6 +143,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="PrisonLife\Commands\RemoteAdmin\Basic\" />
     <Folder Include="PrisonLife\Patches\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

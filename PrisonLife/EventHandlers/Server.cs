@@ -18,6 +18,7 @@ namespace PrisonLife.EventHandlers
     {
         public static void OnWaitingForPlayers()
         {
+            Server.FriendlyFire = true;
             Round.Start();
             Round.IsLocked = true;
             Map.IsDecontaminationEnabled = false;
