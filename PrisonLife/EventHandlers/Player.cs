@@ -119,7 +119,7 @@ namespace PrisonLife.EventHandlers
 
             if (ev.Player.Role.Team == ev.Attacker.Role.Team)
             {
-                if (!ev.Player.IsNTF)
+                if (ev.Player.IsNTF)
                     ev.IsAllowed = false;
             }
 
@@ -131,10 +131,36 @@ namespace PrisonLife.EventHandlers
         {
             RoleTypeId roleTypeId = ev.Player.Role.Type;
 
-            if (ev.Attacker.IsNTF)
+            if (ev.Attacker != null && ev.Attacker.IsNTF)
             {
                 if (ev.Player.Role.Type == RoleTypeId.Tutorial)
-                    ev.Player.Role.Set(RoleTypeId.ClassD);
+                    roleTypeId = RoleTypeId.ClassD;
+
+                try
+                {
+                    if (ev.Player.Items.Count == 0)
+                    {
+                        if (ev.Attacker.CustomInfo == null)
+                            ev.Attacker.CustomInfo = "무고한 수감자 사살 횟수 : 1";
+
+                        else
+                        {
+                            int count = int.Parse(ev.Attacker.CustomInfo.Split(':')[1].Trim());
+                            ev.Attacker.CustomInfo = $"무고한 수감자 사살 횟수 : {count + 1}";
+
+                            if (count > 2)
+                            {
+                                ev.Attacker.CustomInfo = null;
+                                ev.Attacker.Role.Set(RoleTypeId.ClassD, RoleSpawnFlags.None);
+                                ev.Attacker.Kill("무고한 죄수를 너무 많이 죽여버렸습니다.");
+                            }
+                        }
+                    }
+                }
+                catch (Exception e)
+                {
+                    Log.Error(e);
+                }
             }
 
             if (ev.Player.IsNTF)

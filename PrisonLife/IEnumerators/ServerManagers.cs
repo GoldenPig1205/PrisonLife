@@ -57,18 +57,23 @@ namespace PrisonLife.IEnumerators
                                         break;
 
                                     case "[SR] Jailor":
-                                        player.Role.Set(RoleTypeId.FacilityGuard, RoleSpawnFlags.None);
-                                        player.Kill($"교도관을 선택하셨습니다. 행운을 빕니다.");
+                                        if (Player.List.Where(x => x.IsNTF).Count() >= Server.PlayerCount / 2)
+                                        {
+                                            player.ShowHint($"너무 많은 유저가 교도관을 선택했습니다. 다른 직업을 선택해주세요.");
+                                        }
+                                        else
+                                        {
+                                            player.Role.Set(RoleTypeId.FacilityGuard, RoleSpawnFlags.None);
+                                            player.Kill($"교도관을 선택하셨습니다. 행운을 빕니다.");
+                                        }
                                         break;
                                 }
                             }
 
-                            if (player.Role.Type == RoleTypeId.ClassD)
+                            if (player.Role.Type != RoleTypeId.Tutorial)
                             {
                                 if (hit.transform.name == "[SP] Free")
-                                {
                                     PrisonLife.Instance.SpawnFree(player);
-                                }
                             }
                         }
                     }

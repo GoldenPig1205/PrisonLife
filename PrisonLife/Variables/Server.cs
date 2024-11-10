@@ -11,5 +11,6 @@ namespace PrisonLife.Variables
     {
         public static List<Player> ChatCooldown = new List<Player>();
         public static List<Player> MeleeCooldown = new List<Player>();
+        public static Dictionary<Player, int> HealingCooldown = new Dictionary<Player, int>();
     }
 }
