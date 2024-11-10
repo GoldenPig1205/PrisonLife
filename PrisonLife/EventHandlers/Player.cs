@@ -95,7 +95,7 @@ namespace PrisonLife.EventHandlers
         {
             if (!MeleeCooldown.Contains(ev.Player))
             {
-                if (Tools.TryGetLookPlayer(ev.Player, 1.2f, out Player target))
+                if (Tools.TryGetLookPlayer(ev.Player, 1.5f, out Player target))
                 {
                     MeleeCooldown.Add(ev.Player);
 
@@ -130,6 +130,12 @@ namespace PrisonLife.EventHandlers
         public static IEnumerator<float> OnDying(DyingEventArgs ev)
         {
             RoleTypeId roleTypeId = ev.Player.Role.Type;
+
+            if (ev.Attacker.IsNTF)
+            {
+                if (ev.Player.Role.Type == RoleTypeId.Tutorial)
+                    ev.Player.Role.Set(RoleTypeId.ClassD);
+            }
 
             if (ev.Player.IsNTF)
             {
