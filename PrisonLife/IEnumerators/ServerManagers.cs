@@ -58,9 +58,11 @@ namespace PrisonLife.IEnumerators
 
                                     case "[SR] Jailor":
                                         if (Player.List.Where(x => x.IsNTF).Count() >= Server.PlayerCount / 2)
-                                        {
                                             player.ShowHint($"너무 많은 유저가 교도관을 선택했습니다. 다른 직업을 선택해주세요.");
-                                        }
+
+                                        else if (JailorBans.Contains(player))
+                                            player.ShowHint($"교도관 지침을 너무 많이 위반하였기에 당분간은 교도관으로 플레이할 수 없습니다.");
+
                                         else
                                         {
                                             player.Role.Set(RoleTypeId.FacilityGuard, RoleSpawnFlags.None);
