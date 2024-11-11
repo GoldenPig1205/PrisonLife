@@ -141,19 +141,31 @@ namespace PrisonLife.EventHandlers
                     if (ev.Player.Items.Count == 0)
                     {
                         if (ev.Attacker.CustomInfo == null)
-                            ev.Attacker.CustomInfo = "무고한 수감자 사살 횟수 : 1";
-
+                        {
+                            ev.Attacker.CustomInfo = "교도관 지침 위반 횟수 : 1";
+                            ev.Attacker.ShowHint($"교도관 지침을 위반했습니다. 주의하세요.");
+                        }
                         else
                         {
                             int count = int.Parse(ev.Attacker.CustomInfo.Split(':')[1].Trim());
-                            ev.Attacker.CustomInfo = $"무고한 수감자 사살 횟수 : {count + 1}";
+                            ev.Attacker.CustomInfo = $"교도관 지침 위반 횟수 : {count + 1}";
 
                             if (count > 1)
                             {
                                 ev.Attacker.CustomInfo = "";
                                 ev.Attacker.Role.Set(RoleTypeId.ClassD, RoleSpawnFlags.None);
-                                ev.Attacker.Kill("무고한 죄수를 너무 많이 죽여버렸습니다.");
+                                ev.Attacker.Kill("교도관 지침을 너무 많이 위반했습니다.");
+
+                                JailorBans.Add(ev.Attacker);
+
+                                Timing.CallDelayed(60 * 20, () =>
+                                {
+                                    if (JailorBans.Contains(ev.Attacker))
+                                        JailorBans.Remove(ev.Attacker);
+                                });
                             }
+                            else
+                                ev.Attacker.ShowHint($"교도관 지침을 2번 위반했습니다.\n<size=25><color=red>한번 더 위반하면 수감자로 투옥됩니다!</color></size>");
                         }
                     }
                 }
