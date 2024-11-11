@@ -28,7 +28,7 @@ namespace PrisonLife
     {
         public override string Name => base.Name;
         public override string Author => "GoldenPig1205";
-        public override Version Version => new Version(1, 0, 6);
+        public override Version Version => new Version(1, 0, 7);
         public override Version RequiredExiledVersion => new Version(1, 2, 0, 5);
 
         public static PrisonLife Instance;
@@ -39,6 +39,9 @@ namespace PrisonLife
         CoroutineHandle _clearChatCooldown;
         CoroutineHandle _setRole;
         CoroutineHandle _godModeManager;
+        CoroutineHandle _checkTryExit;
+        CoroutineHandle _healManager;
+        CoroutineHandle _syncSpectatedHint;
 
         public override void OnEnabled()
         {
@@ -73,6 +76,9 @@ namespace PrisonLife
             _clearChatCooldown = Timing.RunCoroutine(ClearChatCooldown());
             _setRole = Timing.RunCoroutine(SetRole());
             _godModeManager = Timing.RunCoroutine(GodModeManager());
+            _checkTryExit = Timing.RunCoroutine(CheckTryExit());
+            _healManager = Timing.RunCoroutine(HealManager());
+            _syncSpectatedHint = Timing.RunCoroutine(SyncSpectatedHint());
         }
 
         public override void OnDisabled()
@@ -105,6 +111,9 @@ namespace PrisonLife
             Timing.KillCoroutines(_clearChatCooldown);
             Timing.KillCoroutines(_setRole);
             Timing.KillCoroutines(_godModeManager);
+            Timing.KillCoroutines(_checkTryExit);
+            Timing.KillCoroutines(_healManager);
+            Timing.KillCoroutines(_syncSpectatedHint);
         }
 
         public void OnTimeChanged(Timestamp NewTimestamp)
@@ -242,7 +251,7 @@ namespace PrisonLife
 
         public void SpawnFree(Player player)
         {
-            player.Role.Set(RoleTypeId.Tutorial, RoleSpawnFlags.None);
+            player.Role.Set(RoleTypeId.Tutorial, RoleSpawnFlags.AssignInventory);
 
             player.ClearInventory();
 
