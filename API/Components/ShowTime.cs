@@ -9,6 +9,8 @@ using PrisonLife;
 using PrisonLife.API.Features;
 using MapEditorReborn.API.Features.Objects;
 
+using static PrisonLife.Variables.Server;
+
 public class ShowTime : MonoBehaviour
 {
     float St = 0;
@@ -48,58 +50,56 @@ public class ShowTime : MonoBehaviour
             St += Time.deltaTime;
 
         if (St > 1440)
-        {
             St = 0;
-        }
 
         if (St < 480)
         {
             timestamp = Timestamp.lights_out;
             notice("소등", "모든 수감자는 반드시 각자 방에 있어야 합니다.");
 
-            if (St == 0) Tools.ChangeBackground(25000, "#000000");
+            if (timestamp != timestamp2) Tools.ChangeBackground(25000, "#000000");
         }
         else if (480 < St && St <= 600)
         {
             timestamp = Timestamp.breakfast;
             notice("아침 식사", "아침 식사 시간입니다. 급식소에서 아침 식사를 제공 받으십시오.");
 
-            if (St == 481) Tools.ChangeBackground(375000, "#000000");
+            if (timestamp != timestamp2) Tools.ChangeBackground(375000, "#000000");
         }
         else if (600 < St && St <= 840)
         {
             timestamp = Timestamp.yardtime;
             notice("운동 시간", "여러분, 운동 시간입니다. 운동장으로 가세요.");
 
-            if (St == 601) Tools.ChangeBackground(390000, "#CEF6F5");
+            if (timestamp != timestamp2) Tools.ChangeBackground(390000, "#CEF6F5");
         }
         else if (840 < St && St <= 960)
         {
             timestamp = Timestamp.lurnch;
             notice("점심 식사", "점심 식사 시간입니다. 전원 식당으로 반드시 출석하세요.");
 
-            if (St == 841) Tools.ChangeBackground(360000, "#F5ECCE");
+            if (timestamp != timestamp2) Tools.ChangeBackground(360000, "#F5ECCE");
         }
         else if (960 < St && St <= 1200)
         {
             timestamp = Timestamp.freetime;
             notice("자유 시간", "수감자들을 위한 자유 시간입니다.");
 
-            if (St == 961) Tools.ChangeBackground(350000, "#F5ECCE");
+            if (timestamp != timestamp2) Tools.ChangeBackground(350000, "#F5ECCE");
         }
         else if (1200 < St && St <= 1380)
         {
             timestamp = Timestamp.dinner;
             notice("저녁 식사", "모든 수감자는 급식소에서 저녁 식사를 해야 합니다.");
 
-            if (St == 1201) Tools.ChangeBackground(250000, "#2A0A0A");
+            if (timestamp != timestamp2) Tools.ChangeBackground(250000, "#2A0A0A");
         }
         else if (1380 < St)
         {
             timestamp = Timestamp.lockdown;
             notice("폐방", "수감자는 문을 잠그기 위해 각자 방으로 돌아가야 합니다.");
 
-            if (St == 1381) Tools.ChangeBackground(50000, "#000000");
+            if (timestamp != timestamp2) Tools.ChangeBackground(50000, "#000000");
         }
 
         if (timestamp != timestamp2)

@@ -28,6 +28,8 @@ namespace PrisonLife.EventHandlers
     {
         public static IEnumerator<float> OnVerified(VerifiedEventArgs ev)
         {
+            HealingCooldown.Add(ev.Player, 0);
+
             ev.Player.Role.Set(RoleTypeId.Scientist);
 
             ev.Player.ClearInventory();
@@ -51,6 +53,11 @@ namespace PrisonLife.EventHandlers
 
                 yield return Timing.WaitForOneFrame;
             }
+        }
+
+        public static void OnLeft(LeftEventArgs ev)
+        {
+            HealingCooldown.Remove(ev.Player);
         }
 
         public static void OnSpawned(SpawnedEventArgs ev)
@@ -103,6 +110,14 @@ namespace PrisonLife.EventHandlers
 
                     Hitmarker.SendHitmarkerDirectly(ev.Player.ReferenceHub, 0.5f);
 
+                    if (ev.Player.Role.Type == RoleTypeId.ClassD)
+                    {
+                        if (!CrimePrisons.ContainsKey(ev.Player))
+                            CrimePrisons.Add(ev.Player, true);
+
+                        ev.Player.ShowHint($"범죄를 저질렀습니다. 주의하세요.");
+                    }
+
                     Timing.CallDelayed(1, () =>
                     {
                         if (MeleeCooldown.Contains(ev.Player))
@@ -125,6 +140,8 @@ namespace PrisonLife.EventHandlers
 
             if (ev.DamageHandler.Type == DamageType.Jailbird)
                 ev.DamageHandler.Damage = 20;
+
+            HealingCooldown[ev.Player] = 15;
         }
 
         public static IEnumerator<float> OnDying(DyingEventArgs ev)
@@ -138,40 +155,44 @@ namespace PrisonLife.EventHandlers
 
                 try
                 {
-                    if (ev.Player.Items.Count == 0)
+                    if (!CrimePrisons.ContainsKey(ev.Player))
                     {
-                        if (ev.Attacker.CustomInfo == null)
+                        if (CrimeJailors.ContainsKey(ev.Attacker))
                         {
-                            ev.Attacker.CustomInfo = "교도관 지침 위반 횟수 : 1";
-                            ev.Attacker.ShowHint($"교도관 지침을 위반했습니다. 주의하세요.");
+                            CrimeJailors[ev.Attacker] += 1;
+
+                            if (CrimeJailors[ev.Attacker] >= 3)
+                            {
+                                ev.Attacker.Role.Set(RoleTypeId.ClassD);
+                                ev.Attacker.Kill("교도관 행동 지침을 너무 많이 위반하였습니다.");
+                            }
+                            else
+                                ev.Attacker.ShowHint($"교도관 행동 지침을 {CrimeJailors[ev.Attacker]}번이나 위반했습니다.\n한번 더 위반하면 수감자로 투옥됩니다.");
                         }
                         else
                         {
-                            int count = int.Parse(ev.Attacker.CustomInfo.Split(':')[1].Trim());
-                            ev.Attacker.CustomInfo = $"교도관 지침 위반 횟수 : {count + 1}";
+                            CrimeJailors.Add(ev.Attacker, 1);
 
-                            if (count > 1)
-                            {
-                                ev.Attacker.CustomInfo = "";
-                                ev.Attacker.Role.Set(RoleTypeId.ClassD, RoleSpawnFlags.None);
-                                ev.Attacker.Kill("교도관 지침을 너무 많이 위반했습니다.");
-
-                                JailorBans.Add(ev.Attacker);
-
-                                Timing.CallDelayed(60 * 20, () =>
-                                {
-                                    if (JailorBans.Contains(ev.Attacker))
-                                        JailorBans.Remove(ev.Attacker);
-                                });
-                            }
-                            else
-                                ev.Attacker.ShowHint($"교도관 지침을 2번 위반했습니다.\n<size=25><color=red>한번 더 위반하면 수감자로 투옥됩니다!</color></size>");
+                            ev.Attacker.ShowHint($"교도관 행동 지침을 위반했습니다. 주의하세요.");
                         }
                     }
                 }
                 catch (Exception e)
                 {
                     Log.Error(e);
+                }
+                finally // 플레이어 상태 초기화 
+                {
+                    if (ev.Player.IsNTF) // 교도관
+                    {
+                        if (CrimeJailors.ContainsKey(ev.Player))
+                            CrimeJailors.Remove(ev.Player);
+                    }
+                    else if (ev.Player.Role.Type == RoleTypeId.ClassD) // 수감자
+                    {
+                        if (CrimePrisons.ContainsKey(ev.Player))
+                            CrimePrisons.Remove(ev.Player);
+                    }
                 }
             }
 
@@ -228,6 +249,16 @@ namespace PrisonLife.EventHandlers
 
             if (!ev.Pickup.Base.name.Contains("[P]"))
                 ev.Pickup.Destroy();
+
+            if (ev.Player.Role.Type == RoleTypeId.ClassD)
+            {
+                if (!CrimePrisons.ContainsKey(ev.Player))
+                {
+                    CrimePrisons.Add(ev.Player, true);
+
+                    ev.Player.ShowHint($"범죄를 저질렀습니다. 주의하세요.");
+                }
+            }
         }
 
         public static IEnumerator<float> OnHandcuffing(HandcuffingEventArgs ev)

@@ -10,6 +10,12 @@ namespace PrisonLife.API.DataBases
 {
     public static class Datas
     {
+        public static List<string> CrimeZones = new List<string>() 
+        {
+            "Exit", 
+            "Elevator"
+        };
+
         public static Dictionary<string, string> Colors = new Dictionary<string, string>
         {
             // {"gold", "#EFC01A"},

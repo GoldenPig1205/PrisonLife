@@ -5,11 +5,13 @@ using System.Text;
 using System.Threading.Tasks;
 using AdminToys;
 using Exiled.API.Features;
+using Exiled.API.Features.Roles;
 using MapEditorReborn.API.Features;
 using MapEditorReborn.API.Features.Objects;
 using MapEditorReborn.API.Features.Serializable;
 using MEC;
 using PlayerRoles;
+using PrisonLife.API.DataBases;
 using UnityEngine;
 using static PrisonLife.Variables.Server;
 
@@ -24,6 +26,22 @@ namespace PrisonLife.IEnumerators
                 Log.Info("heartbeat sent");
 
                 yield return Timing.WaitForSeconds(30);
+            }
+        }
+        public static IEnumerator<float> SyncSpectatedHint()
+        {
+            while (true)
+            {
+                foreach (var player in Player.List)
+                {
+                    if (player.Role is SpectatorRole spectator)
+                    {
+                        if (spectator.SpectatedPlayer != null && spectator.SpectatedPlayer.CurrentHint != null)
+                            player.ShowHint(spectator.SpectatedPlayer.CurrentHint.Content, 1.2f);
+                    }
+                }
+
+                yield return Timing.WaitForSeconds(1f);
             }
         }
 
@@ -57,7 +75,7 @@ namespace PrisonLife.IEnumerators
                                         break;
 
                                     case "[SR] Jailor":
-                                        if (Player.List.Where(x => x.IsNTF).Count() >= Server.PlayerCount / 2)
+                                        if (Player.List.Count > 4 && Player.List.Where(x => x.IsNTF).Count() >= Server.PlayerCount / 2)
                                             player.ShowHint($"너무 많은 유저가 교도관을 선택했습니다. 다른 직업을 선택해주세요.");
 
                                         else if (JailorBans.Contains(player))
@@ -85,7 +103,7 @@ namespace PrisonLife.IEnumerators
                     Log.Error(e);
                 }
 
-                yield return Timing.WaitForOneFrame;
+                yield return Timing.WaitForSeconds(0.1f);
             }
         }
 
@@ -113,7 +131,67 @@ namespace PrisonLife.IEnumerators
                     Log.Error(e);
                 }
 
-                yield return Timing.WaitForOneFrame;
+                yield return Timing.WaitForSeconds(0.1f);
+            }
+        }
+
+        public static IEnumerator<float> CheckTryExit()
+        {
+            while (true)
+            {
+                try
+                {
+                    foreach (var player in Player.List.Where(x => x.Role.Type == RoleTypeId.ClassD && !CrimePrisons.ContainsKey(x)))
+                    {
+                        if (Physics.Raycast(player.Position, Vector3.down, out RaycastHit hit, 10, (LayerMask)1))
+                        {
+                            if (Datas.CrimeZones.Contains(hit.transform.name))
+                            {
+                                CrimePrisons.Add(player, true);
+
+                                player.ShowHint("범죄를 저질렀습니다. 주의하세요.");
+                            }
+                        }
+                    }
+                }
+                catch (Exception e)
+                {
+                    Log.Error(e);
+                }
+
+                yield return Timing.WaitForSeconds(0.1f);
+            }
+        }
+
+        public static IEnumerator<float> HealManager()
+        {
+            while (true)
+            {
+                try
+                {
+                    foreach (var player in Player.List)
+                    {
+                        if (HealingCooldown[player] > 0)
+                            HealingCooldown[player] -= 1;
+
+                        else
+                        {
+                            if (player.Health < player.MaxHealth)
+                            {
+                                player.Health += 5;
+
+                                if (player.Health > player.MaxHealth)
+                                    player.Health = player.MaxHealth;
+                            }
+                        }
+                    }
+                }
+                catch (Exception e)
+                {
+                    Log.Error(e);
+                }
+
+                yield return Timing.WaitForSeconds(1);
             }
         }
     }

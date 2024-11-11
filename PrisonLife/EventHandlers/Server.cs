@@ -9,8 +9,11 @@ using Exiled.API.Features.Doors;
 using Exiled.Events.EventArgs.Server;
 using MapEditorReborn.API.Features;
 using MEC;
+using PrisonLife.API.Features;
 using RoundRestarting;
 using UnityEngine;
+
+using static PrisonLife.Variables.Server;
 
 namespace PrisonLife.EventHandlers
 {
@@ -33,6 +36,10 @@ namespace PrisonLife.EventHandlers
         public static void OnRoundStarted()
         {
             MapUtils.LoadMap("PL");
+
+            Lobby = Tools.GetObject("[SP] Lobby");
+            BaseLights = Tools.GetObjectList("[L] Base");
+            SkyBlocks = Tools.GetObjectList("[BG] SkyBlock");
 
             GameObject gameobject = GameObject.Instantiate(new GameObject());
             PrisonLife.ShowTime = gameobject.AddComponent<ShowTime>();

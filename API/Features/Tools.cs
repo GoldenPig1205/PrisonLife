@@ -17,6 +17,8 @@ using MultiBroadcast.API;
 using PlayerRoles;
 using UnityEngine;
 
+using static PrisonLife.Variables.Server;
+
 namespace PrisonLife.API.Features
 {
     public class Tools
@@ -163,10 +165,10 @@ namespace PrisonLife.API.Features
 
         public static void ChangeBackground(float intensity, string color)
         {
-            Tools.GetObjectList("[L] Base").ForEach(x => x.GetComponent<Light>().intensity = intensity);
+            BaseLights.ForEach(x => x.GetComponent<Light>().intensity = intensity);
 
             Color formattedColor = ColorUtility.TryParseHtmlString(color, out Color parsedColor) ? parsedColor : Color.white;
-            Tools.GetObjectList("[BG] SkyBlock").ForEach(x => x.GetComponent<PrimitiveObject>().Primitive.Color = formattedColor);
+            SkyBlocks.ForEach(x => x.GetComponent<PrimitiveObject>().Primitive.Color = formattedColor);
         }
     }
 }
