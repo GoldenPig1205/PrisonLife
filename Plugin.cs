@@ -29,7 +29,7 @@ namespace PrisonLife
     {
         public override string Name => base.Name;
         public override string Author => "GoldenPig1205";
-        public override Version Version => new Version(1, 0, 9);
+        public override Version Version => new Version(1, 0, 10);
         public override Version RequiredExiledVersion => new Version(1, 2, 0, 5);
 
         public static PrisonLife Instance;
@@ -252,9 +252,6 @@ namespace PrisonLife
 
         public void SpawnFree(Player player)
         {
-            if (CrimePrisons.ContainsKey(player))
-                CrimePrisons.Remove(player);
-
             player.Role.Set(RoleTypeId.Tutorial, RoleSpawnFlags.None);
 
             Vector3 pos = Tools.GetRandomValue(Tools.GetObjectList("[SP] Free")).transform.position;
