@@ -153,48 +153,39 @@ namespace PrisonLife.EventHandlers
                 if (ev.Player.Role.Type == RoleTypeId.Tutorial)
                     roleTypeId = RoleTypeId.ClassD;
 
-                try
+                if ((ev.Player.Role.Type == RoleTypeId.ClassD && !CrimePrisons.ContainsKey(ev.Player)) || ev.Player.IsNTF)
                 {
-                    if (ev.Player.Role.Type == RoleTypeId.ClassD && !CrimePrisons.ContainsKey(ev.Player))
+                    if (CrimeJailors.ContainsKey(ev.Attacker))
                     {
-                        if (CrimeJailors.ContainsKey(ev.Attacker))
-                        {
-                            CrimeJailors[ev.Attacker] += 1;
+                        CrimeJailors[ev.Attacker] += 1;
 
-                            if (CrimeJailors[ev.Attacker] >= 3)
-                            {
-                                ev.Attacker.Role.Set(RoleTypeId.ClassD);
-                                ev.Attacker.Kill("교도관 행동 지침을 너무 많이 위반하였습니다.");
-                            }
-                            else
-                                ev.Attacker.ShowHint($"교도관 행동 지침을 {CrimeJailors[ev.Attacker]}번이나 위반했습니다.\n한번 더 위반하면 수감자로 투옥됩니다.");
+                        if (CrimeJailors[ev.Attacker] >= 3)
+                        {
+                            ev.Attacker.Role.Set(RoleTypeId.ClassD);
+                            ev.Attacker.Kill("교도관 행동 지침을 너무 많이 위반하였습니다.");
                         }
                         else
-                        {
-                            CrimeJailors.Add(ev.Attacker, 1);
+                            ev.Attacker.ShowHint($"교도관 행동 지침을 {CrimeJailors[ev.Attacker]}번이나 위반했습니다.\n한번 더 위반하면 수감자로 투옥됩니다.");
+                    }
+                    else
+                    {
+                        CrimeJailors.Add(ev.Attacker, 1);
 
-                            ev.Attacker.ShowHint($"교도관 행동 지침을 위반했습니다. 주의하세요.");
-                        }
+                        ev.Attacker.ShowHint($"교도관 행동 지침을 위반했습니다. 주의하세요.");
                     }
                 }
-                catch (Exception e)
+
+                if (ev.Player.IsNTF) // 교도관
                 {
-                    Log.Error(e);
+                    if (CrimeJailors.ContainsKey(ev.Player))
+                        CrimeJailors.Remove(ev.Player);
                 }
-                finally // 플레이어 상태 초기화 
+                else if (ev.Player.Role.Type == RoleTypeId.ClassD) // 수감자
                 {
-                    if (ev.Player.IsNTF) // 교도관
-                    {
-                        if (CrimeJailors.ContainsKey(ev.Player))
-                            CrimeJailors.Remove(ev.Player);
-                    }
-                    else if (ev.Player.Role.Type == RoleTypeId.ClassD) // 수감자
-                    {
-                        if (CrimePrisons.ContainsKey(ev.Player))
-                            CrimePrisons.Remove(ev.Player);
-                    }
+                    if (CrimePrisons.ContainsKey(ev.Player))
+                        CrimePrisons.Remove(ev.Player);
                 }
-            }
+                }
 
             if (ev.Player.IsNTF)
             {
