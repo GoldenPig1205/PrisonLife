@@ -28,7 +28,7 @@ namespace PrisonLife
     {
         public override string Name => base.Name;
         public override string Author => "GoldenPig1205";
-        public override Version Version => new Version(1, 0, 7);
+        public override Version Version => new Version(1, 0, 8);
         public override Version RequiredExiledVersion => new Version(1, 2, 0, 5);
 
         public static PrisonLife Instance;
@@ -251,7 +251,7 @@ namespace PrisonLife
 
         public void SpawnFree(Player player)
         {
-            player.Role.Set(RoleTypeId.Tutorial, RoleSpawnFlags.AssignInventory);
+            player.Role.Set(RoleTypeId.Tutorial, RoleSpawnFlags.None);
 
             player.ClearInventory();
 
