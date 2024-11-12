@@ -179,10 +179,11 @@ namespace PrisonLife.IEnumerators
                         {
                             if (player.Health < player.MaxHealth)
                             {
-                                player.Health += 5;
-
-                                if (player.Health > player.MaxHealth)
+                                if (player.Health + 5 > player.MaxHealth)
                                     player.Health = player.MaxHealth;
+
+                                else
+                                    player.Health += 5;
                             }
                         }
                     }
