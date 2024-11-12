@@ -38,13 +38,13 @@ public class ShowTime : MonoBehaviour
     void Update()
     {
         if (St < 480)
-            St += Time.deltaTime * 10;
+            St += Time.deltaTime * 3;
 
         else if ((480 < St && St <= 600) || (840 < St && St <= 960) || (1200 < St && St <= 1380))
-            St += Time.deltaTime * 5;
+            St += Time.deltaTime * 2;
 
         else if ((600 < St && St <= 840) || (960 < St && St <= 1200))
-            St += Time.deltaTime * 3;
+            St += Time.deltaTime * 2;
 
         else
             St += Time.deltaTime;

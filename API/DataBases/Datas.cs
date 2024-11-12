@@ -13,7 +13,8 @@ namespace PrisonLife.API.DataBases
         public static List<string> CrimeZones = new List<string>() 
         {
             "Exit", 
-            "Elevator"
+            "Elevator",
+            "GuardRoom"
         };
 
         public static Dictionary<string, string> Colors = new Dictionary<string, string>
