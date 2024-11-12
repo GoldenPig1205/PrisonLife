@@ -37,7 +37,6 @@ namespace PrisonLife.EventHandlers
         {
             MapUtils.LoadMap("PL");
 
-            Lobby = Tools.GetObject("[SP] Lobby");
             BaseLights = Tools.GetObjectList("[L] Base");
             SkyBlocks = Tools.GetObjectList("[BG] SkyBlock");
 
