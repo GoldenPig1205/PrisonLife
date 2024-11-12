@@ -13,6 +13,7 @@ using MEC;
 using PlayerRoles;
 using PrisonLife.API.DataBases;
 using UnityEngine;
+
 using static PrisonLife.Variables.Server;
 
 namespace PrisonLife.IEnumerators
@@ -90,7 +91,7 @@ namespace PrisonLife.IEnumerators
                                 }
                             }
 
-                            if (player.Role.Type != RoleTypeId.Tutorial)
+                            if (player.Role.Type == RoleTypeId.ClassD)
                             {
                                 if (hit.transform.name == "[SP] Free")
                                     PrisonLife.Instance.SpawnFree(player);
