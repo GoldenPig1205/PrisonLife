@@ -20,8 +20,9 @@ using UnityEngine;
 using PrisonLife.API.Features;
 using PlayerRoles;
 using MapEditorReborn.API.Features;
-using Exiled.API.Features.Doors;
 using Exiled.API.Enums;
+using Interactables.Interobjects.DoorUtils;
+using Exiled.API.Features.Doors;
 
 namespace PrisonLife
 {
@@ -29,7 +30,7 @@ namespace PrisonLife
     {
         public override string Name => base.Name;
         public override string Author => "GoldenPig1205";
-        public override Version Version => new Version(1, 0, 10);
+        public override Version Version => new Version(1, 0, 12);
         public override Version RequiredExiledVersion => new Version(1, 2, 0, 5);
 
         public static PrisonLife Instance;
@@ -65,6 +66,8 @@ namespace PrisonLife
             Exiled.Events.Handlers.Player.Hurting += OnHurting;
             Exiled.Events.Handlers.Player.Dying += OnDying;
             Exiled.Events.Handlers.Player.SearchingPickup += OnSearchingPickup;
+            Exiled.Events.Handlers.Player.ReloadingWeapon += OnReloadingWeapon;
+            Exiled.Events.Handlers.Player.ChangingItem += OnChangingItem;
             Exiled.Events.Handlers.Player.Handcuffing += OnHandcuffing;
 
             Exiled.Events.Handlers.Map.PlacingBulletHole += OnPlacingBulletHole;
@@ -100,6 +103,8 @@ namespace PrisonLife
             Exiled.Events.Handlers.Player.Hurting -= OnHurting;
             Exiled.Events.Handlers.Player.Dying -= OnDying;
             Exiled.Events.Handlers.Player.SearchingPickup -= OnSearchingPickup;
+            Exiled.Events.Handlers.Player.ReloadingWeapon -= OnReloadingWeapon;
+            Exiled.Events.Handlers.Player.ChangingItem -= OnChangingItem;
             Exiled.Events.Handlers.Player.Handcuffing -= OnHandcuffing;
 
             Exiled.Events.Handlers.Map.PlacingBulletHole -= OnPlacingBulletHole;
@@ -131,13 +136,13 @@ namespace PrisonLife
                     foreach (var door in Door.List)
                     {
                         if (door.Base.DoorId >= 204 && door.Base.DoorId <= 219)
-                            door.Lock(99999, DoorLockType.SpecialDoorFeature);
+                            door.RequiredPermissions = new DoorPermissions { RequiredPermissions = Interactables.Interobjects.DoorUtils.KeycardPermissions.Checkpoints };
                     }
 
                     foreach (var door in Door.List)
                     {
                         if (door.Base.DoorId >= 189 && door.Base.DoorId <= 190)
-                            door.Lock(99999, DoorLockType.SpecialDoorFeature);
+                            door.RequiredPermissions = new DoorPermissions { RequiredPermissions = Interactables.Interobjects.DoorUtils.KeycardPermissions.Checkpoints };
                     }
 
                     notice("모든 수감자는 반드시 각자 방에 있어야 합니다.");
@@ -147,7 +152,7 @@ namespace PrisonLife
                     foreach (var door in Door.List)
                     {
                         if (door.Base.DoorId >= 204 && door.Base.DoorId <= 219)
-                            door.Unlock();
+                            door.RequiredPermissions = new DoorPermissions { RequiredPermissions = Interactables.Interobjects.DoorUtils.KeycardPermissions.None };
                     }
 
                     notice("아침 식사 시간입니다. 급식소에서 아침 식사를 제공 받으십시오.");
@@ -157,13 +162,19 @@ namespace PrisonLife
                     foreach (var door in Door.List)
                     {
                         if (door.Base.DoorId >= 189 && door.Base.DoorId <= 190)
-                            door.Unlock();
+                            door.RequiredPermissions = new DoorPermissions { RequiredPermissions = Interactables.Interobjects.DoorUtils.KeycardPermissions.None };
                     }
 
                     notice("여러분, 운동 시간입니다. 운동장으로 가세요.");
                     break;
 
                 case Timestamp.lurnch:
+                    foreach (var door in Door.List)
+                    {
+                        if (door.Base.DoorId >= 189 && door.Base.DoorId <= 190)
+                            door.RequiredPermissions = new DoorPermissions { RequiredPermissions = Interactables.Interobjects.DoorUtils.KeycardPermissions.Checkpoints };
+                    }
+
                     notice("점심 식사 시간입니다. 전원 식당으로 반드시 출석하세요.");
                     break;
 
@@ -171,24 +182,23 @@ namespace PrisonLife
                     foreach (var door in Door.List)
                     {
                         if (door.Base.DoorId >= 189 && door.Base.DoorId <= 190)
-                            door.Unlock();
+                            door.RequiredPermissions = new DoorPermissions { RequiredPermissions = Interactables.Interobjects.DoorUtils.KeycardPermissions.None };
                     }
 
                     notice("수감자들을 위한 자유 시간입니다.");
                     break;
 
                 case Timestamp.dinner:
+                    foreach (var door in Door.List)
+                    {
+                        if (door.Base.DoorId >= 189 && door.Base.DoorId <= 190)
+                            door.RequiredPermissions = new DoorPermissions { RequiredPermissions = Interactables.Interobjects.DoorUtils.KeycardPermissions.Checkpoints };
+                    }
 
                     notice("모든 수감자는 급식소에서 저녁 식사를 해야 합니다.");
                     break;
 
                 case Timestamp.lockdown:
-                    foreach (var door in Door.List)
-                    {
-                        if (door.Base.DoorId >= 189 && door.Base.DoorId <= 190)
-                            door.Lock(99999, DoorLockType.SpecialDoorFeature);
-                    }
-
                     notice("수감자는 문을 잠그기 위해 각자 방으로 돌아가야 합니다.");
                     break;
             }
@@ -227,6 +237,7 @@ namespace PrisonLife
             player.ClearInventory();
             player.AddItem(ItemType.GunCOM15);
             player.AddItem(ItemType.Ammo9x19);
+            player.AddItem(ItemType.GunCOM18);
 
             Vector3 pos = Tools.GetRandomValue(Tools.GetObjectList("[SP] Jailor")).transform.position;
             player.Position = new Vector3(pos.x, pos.y + 2, pos.z);
