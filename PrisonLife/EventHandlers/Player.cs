@@ -155,7 +155,7 @@ namespace PrisonLife.EventHandlers
 
                 try
                 {
-                    if (!CrimePrisons.ContainsKey(ev.Player))
+                    if (ev.Player.Role.Type == RoleTypeId.ClassD && !CrimePrisons.ContainsKey(ev.Player))
                     {
                         if (CrimeJailors.ContainsKey(ev.Attacker))
                         {
