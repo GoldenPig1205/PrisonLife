@@ -7,6 +7,7 @@ using Exiled.API.Features;
 using MEC;
 
 using static PrisonLife.Variables.Protocol;
+using static PrisonLife.Variables.Server;
 
 using static PrisonLife.EventHandlers.ServerEvent;
 using static PrisonLife.EventHandlers.PlayerEvent;
@@ -28,7 +29,7 @@ namespace PrisonLife
     {
         public override string Name => base.Name;
         public override string Author => "GoldenPig1205";
-        public override Version Version => new Version(1, 0, 8);
+        public override Version Version => new Version(1, 0, 9);
         public override Version RequiredExiledVersion => new Version(1, 2, 0, 5);
 
         public static PrisonLife Instance;
@@ -251,9 +252,10 @@ namespace PrisonLife
 
         public void SpawnFree(Player player)
         {
-            player.Role.Set(RoleTypeId.Tutorial, RoleSpawnFlags.None);
+            if (CrimePrisons.ContainsKey(player))
+                CrimePrisons.Remove(player);
 
-            player.ClearInventory();
+            player.Role.Set(RoleTypeId.Tutorial, RoleSpawnFlags.None);
 
             Vector3 pos = Tools.GetRandomValue(Tools.GetObjectList("[SP] Free")).transform.position;
             player.Position = new Vector3(pos.x, pos.y + 2, pos.z);
