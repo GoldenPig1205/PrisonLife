@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using Exiled.API.Enums;
@@ -100,7 +101,7 @@ namespace PrisonLife.EventHandlers
 
         public static void OnTogglingNoClip(TogglingNoClipEventArgs ev)
         {
-            if (!MeleeCooldown.Contains(ev.Player))
+            if (!MeleeCooldown.Contains(ev.Player) && !ev.Player.IsCuffed)
             {
                 if (Tools.TryGetLookPlayer(ev.Player, 1.5f, out Player target))
                 {
@@ -113,9 +114,11 @@ namespace PrisonLife.EventHandlers
                     if (ev.Player.Role.Type == RoleTypeId.ClassD)
                     {
                         if (!CrimePrisons.ContainsKey(ev.Player))
+                        {
                             CrimePrisons.Add(ev.Player, true);
 
-                        ev.Player.ShowHint($"범죄를 저질렀습니다. 주의하세요.");
+                            ev.Player.ShowHint($"범죄를 저질렀습니다. 주의하세요.");
+                        }
                     }
 
                     Timing.CallDelayed(1, () =>
@@ -127,21 +130,34 @@ namespace PrisonLife.EventHandlers
             }
         }
 
-        public static void OnHurting(HurtingEventArgs ev)
+        public static IEnumerator<float> OnHurting(HurtingEventArgs ev)
         {
-            if (ev.Attacker == null)
-                return;
+            HealingCooldown[ev.Player] = 15;
 
-            if (ev.Player.Role.Team == ev.Attacker.Role.Team)
-            {
-                if (ev.Player.IsNTF)
-                    ev.IsAllowed = false;
-            }
+            if (ev.Attacker == null)
+                yield break;
 
             if (ev.DamageHandler.Type == DamageType.Jailbird)
                 ev.DamageHandler.Damage = 20;
 
-            HealingCooldown[ev.Player] = 15;
+            if (ev.Attacker.CurrentItem.Type == ItemType.GunCOM18)
+            {
+                ev.IsAllowed = false;
+
+                if (!ev.Player.IsNTF)
+                {
+                    ev.Player.EnableEffect(EffectType.Ensnared, 5f);
+
+                    for (int i = 1; i < 51; i++)
+                    {
+                        ev.Player.CurrentItem = null;
+
+                        yield return Timing.WaitForSeconds(0.1f);
+                    }
+
+                    ev.Player.DisableEffect(EffectType.Ensnared);
+                }
+            }
         }
 
         public static IEnumerator<float> OnDying(DyingEventArgs ev)
@@ -258,6 +274,23 @@ namespace PrisonLife.EventHandlers
 
                     ev.Player.ShowHint($"범죄를 저질렀습니다. 주의하세요.");
                 }
+            }
+        }
+
+        public static void OnReloadingWeapon(ReloadingWeaponEventArgs ev)
+        {
+            if (ev.Item.Type == ItemType.GunCOM18)
+                ev.IsAllowed = false;
+        }
+
+        public static void OnChangingItem(ChangingItemEventArgs ev)
+        {
+            if (ev.Item.Type == ItemType.GunCOM18)
+            {
+                if (ev.Item.As<Firearm>().Ammo > 2)
+                    ev.Item.As<Firearm>().Ammo = 2;
+
+                Firearm gunCom18 = ev.Item.As<Firearm>();
             }
         }
 
