@@ -19,7 +19,7 @@ using MEC;
 
 namespace PrisonLife.Commands.Client.Basic
 {
-    [CommandHandler(typeof(ClientCommandHandler))]
+    // [CommandHandler(typeof(ClientCommandHandler))]
     public class Chat : ICommand
     {
         public bool Execute(ArraySegment<string> arguments, ICommandSender sender, out string response)
