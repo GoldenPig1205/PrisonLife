@@ -26,9 +26,13 @@
               "Title": "Plugin.cs",
               "DocumentMoniker": "C:\\GoldenPig1205\\Visual Studio 2022\\PrisonLife\\Plugin.cs",
               "RelativeDocumentMoniker": "Plugin.cs",
-              "ToolTip": "C:\\GoldenPig1205\\Visual Studio 2022\\PrisonLife\\Plugin.cs*",
-              "RelativeToolTip": "Plugin.cs*",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAB4AAAA+AAAAAAAAAA==",
+              "ToolTip": "C:\\GoldenPig1205\\Visual Studio 2022\\PrisonLife\\Plugin.cs",
+              "RelativeToolTip": "Plugin.cs",
+<<<<<<< Updated upstream
+              "ViewState": "AgIAAAkAAAAAAAAAAAAAAB4AAABAAAAAAAAAAA==",
+=======
+              "ViewState": "AgIAANcAAAAAAAAAAAAuwAEBAABAAAAAAAAAAA==",
+>>>>>>> Stashed changes
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2024-11-06T08:52:00.09Z",
               "EditorCaption": ""
