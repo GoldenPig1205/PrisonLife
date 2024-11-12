@@ -131,6 +131,7 @@
     <Compile Include="Discord\Command.cs" />
     <Compile Include="Discord\Webhook.cs" />
     <Compile Include="PrisonLife\Commands\Client\Basic\Chat.cs" />
+    <Compile Include="PrisonLife\Commands\Client\Basic\Reset.cs" />
     <Compile Include="PrisonLife\EventHandlers\Item.cs" />
     <Compile Include="PrisonLife\EventHandlers\Map.cs" />
     <Compile Include="PrisonLife\EventHandlers\Player.cs" />
