@@ -37,8 +37,7 @@ namespace PrisonLife.EventHandlers
 
             Timing.CallDelayed(10, () =>
             {
-                if (ev.Pickup.IsSpawned)
-                    ev.Pickup.UnSpawn();
+                ev.Pickup.Destroy();
             });
         }
     }
