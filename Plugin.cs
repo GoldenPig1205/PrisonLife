@@ -219,7 +219,6 @@ namespace PrisonLife
 
             player.RankName = "수감자";
             player.RankColor = "orange";
-            player.Group.Permissions = 101202401;
 
             Timing.CallDelayed(7, () =>
             {

@@ -3,12 +3,12 @@
   "WorkspaceRootPath": "D:\\GoldenPig1205\\Visual Studio 2022\\PrisonLife\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{56C68CAC-BA33-49A4-B4B0-18209A5EAAE6}|PrisonLife.csproj|d:\\goldenpig1205\\visual studio 2022\\prisonlife\\prisonlife\\ienumerators\\servermanagers.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{56C68CAC-BA33-49A4-B4B0-18209A5EAAE6}|PrisonLife.csproj|solutionrelative:prisonlife\\ienumerators\\servermanagers.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
       "AbsoluteMoniker": "D:0:0:{56C68CAC-BA33-49A4-B4B0-18209A5EAAE6}|PrisonLife.csproj|d:\\goldenpig1205\\visual studio 2022\\prisonlife\\plugin.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{56C68CAC-BA33-49A4-B4B0-18209A5EAAE6}|PrisonLife.csproj|solutionrelative:plugin.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{56C68CAC-BA33-49A4-B4B0-18209A5EAAE6}|PrisonLife.csproj|d:\\goldenpig1205\\visual studio 2022\\prisonlife\\prisonlife\\ienumerators\\servermanagers.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{56C68CAC-BA33-49A4-B4B0-18209A5EAAE6}|PrisonLife.csproj|solutionrelative:prisonlife\\ienumerators\\servermanagers.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     }
   ],
   "DocumentGroupContainers": [
@@ -18,7 +18,7 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 1,
+          "SelectedChildIndex": 2,
           "Children": [
             {
               "$type": "Bookmark",
@@ -26,26 +26,26 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 0,
+              "DocumentIndex": 1,
               "Title": "ServerManagers.cs",
               "DocumentMoniker": "D:\\GoldenPig1205\\Visual Studio 2022\\PrisonLife\\PrisonLife\\IEnumerators\\ServerManagers.cs",
               "RelativeDocumentMoniker": "PrisonLife\\IEnumerators\\ServerManagers.cs",
-              "ToolTip": "D:\\GoldenPig1205\\Visual Studio 2022\\PrisonLife\\PrisonLife\\IEnumerators\\ServerManagers.cs*",
-              "RelativeToolTip": "PrisonLife\\IEnumerators\\ServerManagers.cs*",
-              "ViewState": "AgIAAGcAAAAAAAAAAAAYwHoAAABFAAAAAAAAAA==",
+              "ToolTip": "D:\\GoldenPig1205\\Visual Studio 2022\\PrisonLife\\PrisonLife\\IEnumerators\\ServerManagers.cs",
+              "RelativeToolTip": "PrisonLife\\IEnumerators\\ServerManagers.cs",
+              "ViewState": "AgIAAK8AAAAAAAAAAAAiwH0AAAAfAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2024-11-13T10:25:14.668Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 1,
+              "DocumentIndex": 0,
               "Title": "Plugin.cs",
               "DocumentMoniker": "D:\\GoldenPig1205\\Visual Studio 2022\\PrisonLife\\Plugin.cs",
               "RelativeDocumentMoniker": "Plugin.cs",
-              "ToolTip": "D:\\GoldenPig1205\\Visual Studio 2022\\PrisonLife\\Plugin.cs",
-              "RelativeToolTip": "Plugin.cs",
-              "ViewState": "AgIAAKwAAAAAAAAAAAAswBEBAAAAAAAAAAAAAA==",
+              "ToolTip": "D:\\GoldenPig1205\\Visual Studio 2022\\PrisonLife\\Plugin.cs*",
+              "RelativeToolTip": "Plugin.cs*",
+              "ViewState": "AgIAAMoAAAAAAAAAAAAswNoAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2024-11-12T15:18:48.034Z",
               "EditorCaption": ""
