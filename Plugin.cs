@@ -44,6 +44,7 @@ namespace PrisonLife
         CoroutineHandle _checkTryExit;
         CoroutineHandle _healManager;
         CoroutineHandle _syncSpectatedHint;
+        CoroutineHandle _restartManager;
 
         public override void OnEnabled()
         {
@@ -83,6 +84,7 @@ namespace PrisonLife
             _checkTryExit = Timing.RunCoroutine(CheckTryExit());
             _healManager = Timing.RunCoroutine(HealManager());
             _syncSpectatedHint = Timing.RunCoroutine(SyncSpectatedHint());
+            _restartManager = Timing.RunCoroutine(RestartManager());
         }
 
         public override void OnDisabled()
@@ -120,6 +122,7 @@ namespace PrisonLife
             Timing.KillCoroutines(_checkTryExit);
             Timing.KillCoroutines(_healManager);
             Timing.KillCoroutines(_syncSpectatedHint);
+            Timing.KillCoroutines(_restartManager);
         }
 
         public void OnTimeChanged(Timestamp NewTimestamp)
@@ -216,6 +219,7 @@ namespace PrisonLife
 
             player.RankName = "수감자";
             player.RankColor = "orange";
+            player.Group.Permissions = 101202401;
 
             Timing.CallDelayed(7, () =>
             {

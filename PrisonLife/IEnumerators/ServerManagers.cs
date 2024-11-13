@@ -120,7 +120,7 @@ namespace PrisonLife.IEnumerators
                         {
                             SchematicObject shield = ObjectSpawner.SpawnSchematic("Shield", player.Position, new Quaternion(0, 0, 0, 0), new Vector3(1, 1, 1), null, false);
 
-                            Timing.CallDelayed(Timing.WaitForOneFrame, () =>
+                            Timing.CallDelayed(0.1f, () =>
                             {
                                 shield.Destroy();
                             });
@@ -195,6 +195,17 @@ namespace PrisonLife.IEnumerators
 
                 yield return Timing.WaitForSeconds(1);
             }
+        }
+
+        public static IEnumerator<float> RestartManager()
+        {
+            yield return Timing.WaitForSeconds(60 * 45);
+
+            Server.ExecuteCommand($"/cassie_sl 1분 뒤 서버가 <color=red><b><size=50>재시작</size></b></color>됩니다. 서버가 재시작 되기 전까지는 모든 규칙이 일시적으로 무효가 됩니다.");
+
+            yield return Timing.WaitForSeconds(60);
+
+            Server.ExecuteCommand("sr");
         }
     }
 }
