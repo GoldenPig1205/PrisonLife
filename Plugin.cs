@@ -30,7 +30,7 @@ namespace PrisonLife
     {
         public override string Name => base.Name;
         public override string Author => "GoldenPig1205";
-        public override Version Version => new Version(1, 0, 13);
+        public override Version Version => new Version(1, 0, 14);
         public override Version RequiredExiledVersion => new Version(1, 2, 0, 5);
 
         public static PrisonLife Instance;
@@ -216,15 +216,8 @@ namespace PrisonLife
             player.IsGodModeEnabled = true;
             player.IsBypassModeEnabled = false;
 
-            if (player.Group == null)
-            {
-                player.Group = new UserGroup { BadgeText = "수감자", BadgeColor = "orange" };
-            }
-            else
-            {
-                player.RankName = "수감자";
-                player.RankColor = "orange";
-            }
+            player.RankName = "수감자";
+            player.RankColor = "orange";
 
             Timing.CallDelayed(7, () =>
             {
@@ -247,15 +240,8 @@ namespace PrisonLife
             player.IsGodModeEnabled = true;
             player.IsBypassModeEnabled = true;
 
-            if (player.Group == null)
-            {
-                player.Group = new UserGroup { BadgeText = "교도관", BadgeColor = "silver" };
-            }
-            else
-            {
-                player.RankName = "교도관";
-                player.RankColor = "silver";
-            }
+            player.RankName = "교도관";
+            player.RankColor = "silver";
 
             Timing.CallDelayed(7, () =>
             {
@@ -273,15 +259,8 @@ namespace PrisonLife
             player.IsGodModeEnabled = true;
             player.IsBypassModeEnabled = false;
 
-            if (player.Group == null)
-            {
-                player.Group = new UserGroup { BadgeText = "범죄자", BadgeColor = "red" };
-            }
-            else
-            {
-                player.RankName = "범죄자";
-                player.RankColor = "red";
-            }
+            player.RankName = "범죄자";
+            player.RankColor = "red";
 
             Timing.CallDelayed(7, () =>
             {
