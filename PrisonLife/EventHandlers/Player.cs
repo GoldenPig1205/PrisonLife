@@ -37,8 +37,9 @@ namespace PrisonLife.EventHandlers
 
             ev.Player.EnableEffect(EffectType.Invisible);
             ev.Player.Position = Tools.GetObject("[SP] Lobby").position;
-            ev.Player.Group.BadgeText = "중립";
-            ev.Player.Group.BadgeColor = "white";
+
+            ev.Player.RankName = "중립";
+            ev.Player.RankColor = "white";
 
             ev.Player.ShowHint($"<b><size=40><size=50>[<color=#A4A4A4>교도관</color>]</size>\n<mark=#A4A4A4aa>수감자들을 잘 감시하세요. 불법 반입 물품 압수, 폭동 진압, 무엇보다도 탈옥 시도를 저지해야 합니다. 하지만 감옥을 위협하는 것이 죄수뿐만은 아니라는 것, 명심하세요.</mark>\n\n" +
                 $"<size=50>[<color=#FF8000>수감자</color>]</size>\n<mark=#FF8000aa>가석방이 없는 종신형을 받은 무고한 시민인 당신, 어떤 희망도 미래도 보이지 않습니다. 지금 당신은 갈림길에 서있습니다. 평생 추운 감옥에 갇혀 의미 없는 나날을 보낼 것인가, 아니면 탈옥할 것인가...</mark></size></b>\n\n\n" +
@@ -59,6 +60,18 @@ namespace PrisonLife.EventHandlers
         public static void OnLeft(LeftEventArgs ev)
         {
             HealingCooldown.Remove(ev.Player);
+
+            if (ChatCooldown.Contains(ev.Player))
+                ChatCooldown.Remove(ev.Player);
+
+            if (MeleeCooldown.Contains(ev.Player))
+                MeleeCooldown.Remove(ev.Player);
+
+            if (CrimePrisons.ContainsKey(ev.Player))
+                CrimePrisons.Remove(ev.Player);
+
+            if (CrimeJailors.ContainsKey(ev.Player))
+                CrimeJailors.Remove(ev.Player);
         }
 
         public static void OnSpawned(SpawnedEventArgs ev)
@@ -185,6 +198,8 @@ namespace PrisonLife.EventHandlers
                         {
                             ev.Attacker.Role.Set(RoleTypeId.ClassD);
                             ev.Attacker.Kill("교도관 행동 지침을 너무 많이 위반하였습니다.");
+
+                            JailorBans.Add(ev.Attacker.UserId);
                         }
                         else
                             ev.Attacker.ShowHint($"교도관 행동 지침을 {CrimeJailors[ev.Attacker]}번이나 위반했습니다.\n한번 더 위반하면 수감자로 투옥됩니다.");
@@ -234,8 +249,8 @@ namespace PrisonLife.EventHandlers
 
                     ev.Player.EnableEffect(EffectType.Invisible);
                     ev.Player.Position = Tools.GetObject("[SP] Lobby").position;
-                    ev.Player.Group.BadgeText = "중립";
-                    ev.Player.Group.BadgeColor = "white";
+                    ev.Player.RankName = "중립";
+                    ev.Player.RankColor = "white";
 
                     ev.Player.ShowHint($"<b><size=40><size=50>[<color=#A4A4A4>교도관</color>]</size>\n<mark=#A4A4A4aa>수감자들을 잘 감시하세요. 불법 반입 물품 압수, 폭동 진압, 무엇보다도 탈옥 시도를 저지해야 합니다. 하지만 감옥을 위협하는 것이 죄수뿐만은 아니라는 것, 명심하세요.</mark>\n\n" +
                         $"<size=50>[<color=#FF8000>수감자</color>]</size>\n<mark=#FF8000aa>가석방이 없는 종신형을 받은 무고한 시민인 당신, 어떤 희망도 미래도 보이지 않습니다. 지금 당신은 갈림길에 서있습니다. 평생 추운 감옥에 갇혀 의미 없는 나날을 보낼 것인가, 아니면 탈옥할 것인가...</mark></size></b>\n\n\n" +
@@ -330,6 +345,30 @@ namespace PrisonLife.EventHandlers
         {
             if (ev.Player.IsNTF && (ev.Target.Role.Type == RoleTypeId.Tutorial || ev.Target.Role.Type == RoleTypeId.ClassD))
             {
+                if (ev.Target.Role.Type == RoleTypeId.ClassD && !CrimePrisons.ContainsKey(ev.Target))
+                {
+                    if (CrimeJailors.ContainsKey(ev.Player))
+                    {
+                        CrimeJailors[ev.Player] += 1;
+
+                        if (CrimeJailors[ev.Player] >= 3)
+                        {
+                            ev.Player.Role.Set(RoleTypeId.ClassD);
+                            ev.Player.Kill("교도관 행동 지침을 너무 많이 위반하였습니다.");
+
+                            JailorBans.Add(ev.Player.UserId);
+                        }
+                        else
+                            ev.Player.ShowHint($"교도관 행동 지침을 {CrimeJailors[ev.Player]}번이나 위반했습니다.\n한번 더 위반하면 수감자로 투옥됩니다.");
+                    }
+                    else
+                    {
+                        CrimeJailors.Add(ev.Player, 1);
+
+                        ev.Player.ShowHint($"교도관 행동 지침을 위반했습니다. 주의하세요.");
+                    }
+                }
+
                 ev.Target.EnableEffect(EffectType.Ensnared);
 
                 for (int i = 1; i < 6; i++)
@@ -342,28 +381,6 @@ namespace PrisonLife.EventHandlers
                 ev.Target.RemoveHandcuffs();
                 ev.Target.ClearInventory();
                 PrisonLife.Instance.SpawnPrison(ev.Target);
-
-                if (ev.Target.Role.Type == RoleTypeId.ClassD && !CrimePrisons.ContainsKey(ev.Target))
-                {
-                    if (CrimeJailors.ContainsKey(ev.Player))
-                    {
-                        CrimeJailors[ev.Player] += 1;
-
-                        if (CrimeJailors[ev.Player] >= 3)
-                        {
-                            ev.Player.Role.Set(RoleTypeId.ClassD);
-                            ev.Player.Kill("교도관 행동 지침을 너무 많이 위반하였습니다.");
-                        }
-                        else
-                            ev.Player.ShowHint($"교도관 행동 지침을 {CrimeJailors[ev.Player]}번이나 위반했습니다.\n한번 더 위반하면 수감자로 투옥됩니다.");
-                    }
-                    else
-                    {
-                        CrimeJailors.Add(ev.Player, 1);
-
-                        ev.Player.ShowHint($"교도관 행동 지침을 위반했습니다. 주의하세요.");
-                    }
-                }
             }
         }
     }
