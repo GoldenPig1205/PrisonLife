@@ -30,7 +30,7 @@ namespace PrisonLife
     {
         public override string Name => base.Name;
         public override string Author => "GoldenPig1205";
-        public override Version Version => new Version(1, 0, 14);
+        public override Version Version => new Version(1, 0, 15);
         public override Version RequiredExiledVersion => new Version(1, 2, 0, 5);
 
         public static PrisonLife Instance;
@@ -66,7 +66,6 @@ namespace PrisonLife
             Exiled.Events.Handlers.Player.Hurting += OnHurting;
             Exiled.Events.Handlers.Player.Dying += OnDying;
             Exiled.Events.Handlers.Player.SearchingPickup += OnSearchingPickup;
-            Exiled.Events.Handlers.Player.DroppingItem += OnDroppingItem;
             Exiled.Events.Handlers.Player.ReloadingWeapon += OnReloadingWeapon;
             Exiled.Events.Handlers.Player.ChangingItem += OnChangingItem;
             Exiled.Events.Handlers.Player.Handcuffing += OnHandcuffing;
@@ -104,7 +103,6 @@ namespace PrisonLife
             Exiled.Events.Handlers.Player.Hurting -= OnHurting;
             Exiled.Events.Handlers.Player.Dying -= OnDying;
             Exiled.Events.Handlers.Player.SearchingPickup -= OnSearchingPickup;
-            Exiled.Events.Handlers.Player.DroppingItem -= OnDroppingItem;
             Exiled.Events.Handlers.Player.ReloadingWeapon -= OnReloadingWeapon;
             Exiled.Events.Handlers.Player.ChangingItem -= OnChangingItem;
             Exiled.Events.Handlers.Player.Handcuffing -= OnHandcuffing;
