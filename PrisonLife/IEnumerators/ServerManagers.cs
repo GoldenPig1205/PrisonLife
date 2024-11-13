@@ -120,7 +120,7 @@ namespace PrisonLife.IEnumerators
                         {
                             SchematicObject shield = ObjectSpawner.SpawnSchematic("Shield", player.Position, new Quaternion(0, 0, 0, 0), new Vector3(1, 1, 1), null, false);
 
-                            Timing.CallDelayed(0.1f, () =>
+                            Timing.CallDelayed(Timing.WaitForOneFrame, () =>
                             {
                                 shield.Destroy();
                             });
