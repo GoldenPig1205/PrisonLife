@@ -163,19 +163,16 @@ namespace PrisonLife.EventHandlers
             {
                 ev.IsAllowed = false;
 
-                if (!ev.Player.IsNTF)
+                ev.Player.EnableEffect(EffectType.Ensnared, 5f);
+
+                for (int i = 1; i < 51; i++)
                 {
-                    ev.Player.EnableEffect(EffectType.Ensnared, 5f);
+                    ev.Player.CurrentItem = null;
 
-                    for (int i = 1; i < 51; i++)
-                    {
-                        ev.Player.CurrentItem = null;
-
-                        yield return Timing.WaitForSeconds(0.1f);
-                    }
-
-                    ev.Player.DisableEffect(EffectType.Ensnared);
+                    yield return Timing.WaitForSeconds(0.1f);
                 }
+
+                ev.Player.DisableEffect(EffectType.Ensnared);
             }
         }
 
@@ -313,12 +310,6 @@ namespace PrisonLife.EventHandlers
                     ev.Player.ShowHint($"범죄를 저질렀습니다. 주의하세요.");
                 }
             }
-        }
-
-        public static void OnDroppingItem(DroppingItemEventArgs ev)
-        {
-            if (ev.Player.IsNTF)
-                ev.IsAllowed = false;
         }
 
         public static void OnReloadingWeapon(ReloadingWeaponEventArgs ev)
