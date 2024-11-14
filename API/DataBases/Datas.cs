@@ -14,7 +14,8 @@ namespace PrisonLife.API.DataBases
         {
             "Exit", 
             "Elevator",
-            "GuardRoom"
+            "GuardRoom",
+            "Kitchen"
         };
 
         public static Dictionary<string, string> Colors = new Dictionary<string, string>

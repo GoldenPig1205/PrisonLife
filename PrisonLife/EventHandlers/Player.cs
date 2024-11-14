@@ -15,6 +15,7 @@ using Interactables.Interobjects.DoorUtils;
 using InventorySystem;
 using InventorySystem.Items.Firearms.Ammo;
 using MapEditorReborn.API.Features;
+using MapEditorReborn.API.Features.Objects;
 using MEC;
 using PlayerRoles;
 using PrisonLife.API.DataBases;
@@ -282,7 +283,10 @@ namespace PrisonLife.EventHandlers
         public static void OnSearchingPickup(SearchingPickupEventArgs ev)
         {
             if (ev.Pickup.Base.name.Contains("[O]"))
+            {
+                ev.IsAllowed = false;
                 return;
+            }
 
             if (ev.Pickup.Type.ToString().Contains($"Ammo"))
             {
@@ -318,17 +322,40 @@ namespace PrisonLife.EventHandlers
                 ev.IsAllowed = false;
         }
 
-        public static void OnChangingItem(ChangingItemEventArgs ev)
+        public static IEnumerator<float> OnChangingItem(ChangingItemEventArgs ev)
         {
             if (ev.Item == null)
-                return;
+                yield break;
 
-            if (ev.Item.Type == ItemType.GunCOM18)
+            switch (ev.Item.Type) 
             {
-                if (ev.Item.As<Firearm>().Ammo > 2)
-                    ev.Item.As<Firearm>().Ammo = 2;
+                case ItemType.GunCOM18:
+                    if (ev.Item.As<Firearm>().Ammo > 2)
+                        ev.Item.As<Firearm>().Ammo = 2;
 
-                Firearm gunCom18 = ev.Item.As<Firearm>();
+                    Firearm gunCom18 = ev.Item.As<Firearm>();
+                    break;
+
+                case ItemType.KeycardJanitor:
+                    SchematicObject plate = ObjectSpawner.SpawnSchematic("Plate", Vector3.zero, isStatic: true);
+
+                    yield return Timing.WaitForSeconds(0.1f);
+
+                    while (ev.Player.CurrentItem.Type == ItemType.KeycardJanitor)
+                    {
+                        Vector3 cameraPosition = ev.Player.CameraTransform.position;
+                        Vector3 cameraForward = ev.Player.CameraTransform.forward;
+
+                        Vector3 spawnPosition = cameraPosition + cameraForward * 0.5f;
+
+                        plate.Position = spawnPosition;
+
+                        yield return Timing.WaitForOneFrame;
+                    }
+
+                    plate.Destroy();
+
+                    break;
             }
         }
 
