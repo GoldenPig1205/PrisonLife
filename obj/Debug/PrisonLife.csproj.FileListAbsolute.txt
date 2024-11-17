@@ -195,3 +195,4 @@ C:\GoldenPig1205\Visual Studio 2022\PrisonLife\obj\Debug\PrisonLife.csproj.CoreC
 C:\GoldenPig1205\Visual Studio 2022\PrisonLife\obj\Debug\PrisonLife.csproj.Up2Date
 C:\GoldenPig1205\Visual Studio 2022\PrisonLife\obj\Debug\PrisonLife.dll
 C:\GoldenPig1205\Visual Studio 2022\PrisonLife\obj\Debug\PrisonLife.pdb
+D:\GoldenPig1205\Visual Studio 2022\PrisonLife\bin\Debug\DiscordInteraction.dll

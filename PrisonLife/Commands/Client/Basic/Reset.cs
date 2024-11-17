@@ -10,7 +10,7 @@ using PrisonLife.API.Features;
 using PrisonLife.API.DataBases;
 using UnityEngine;
 
-using PrisonLife.Discord;
+using DiscordInteraction.Discord;
 using CustomPlayerEffects;
 using Exiled.API.Features.Items;
 

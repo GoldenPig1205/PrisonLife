@@ -25,12 +25,6 @@ namespace PrisonLife.EventHandlers
             Round.Start();
             Round.IsLocked = true;
             Map.IsDecontaminationEnabled = false;
-
-            var webhook = new Discord.Webhook();
-            webhook.OnEnabled();
-
-            var command = new Discord.Command();
-            command.OnEnabled();
         }
 
         public static void OnRoundStarted()

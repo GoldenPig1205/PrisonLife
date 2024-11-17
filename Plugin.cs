@@ -6,7 +6,6 @@ using System.Threading.Tasks;
 using Exiled.API.Features;
 using MEC;
 
-using static PrisonLife.Variables.Protocol;
 using static PrisonLife.Variables.Server;
 
 using static PrisonLife.EventHandlers.ServerEvent;
@@ -50,9 +49,6 @@ namespace PrisonLife
         {
             Instance = this;
             base.OnEnabled();
-
-            WebhookURL = Config.WebhookURL;
-            BotAPIServer = Config.BotAPIServer;
 
             Exiled.Events.Handlers.Server.WaitingForPlayers += OnWaitingForPlayers;
             Exiled.Events.Handlers.Server.RoundStarted += OnRoundStarted;

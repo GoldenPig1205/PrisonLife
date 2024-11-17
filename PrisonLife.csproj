@@ -45,6 +45,9 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\SCPSL\SCPSL_Data\Managed\CommandSystem.Core.dll</HintPath>
     </Reference>
+    <Reference Include="DiscordInteraction">
+      <HintPath>C:\Users\GoldenPig1205\AppData\Roaming\EXILED\Plugins\DiscordInteraction.dll</HintPath>
+    </Reference>
     <Reference Include="Exiled.API">
       <HintPath>C:\Users\GoldenPig1205\AppData\Roaming\EXILED\Plugins\dependencies\Exiled.API.dll</HintPath>
     </Reference>
@@ -128,8 +131,6 @@
     <Compile Include="API\DataBases\Translators.cs" />
     <Compile Include="API\Enums\Timestamp.cs" />
     <Compile Include="API\Features\Tools.cs" />
-    <Compile Include="Discord\Command.cs" />
-    <Compile Include="Discord\Webhook.cs" />
     <Compile Include="PrisonLife\Commands\Client\Basic\Chat.cs" />
     <Compile Include="PrisonLife\Commands\Client\Basic\Reset.cs" />
     <Compile Include="PrisonLife\EventHandlers\Item.cs" />
@@ -139,7 +140,6 @@
     <Compile Include="PrisonLife\Configs\Config.cs" />
     <Compile Include="Plugin.cs" />
     <Compile Include="PrisonLife\IEnumerators\ServerManagers.cs" />
-    <Compile Include="PrisonLife\Variables\Protocol.cs" />
     <Compile Include="PrisonLife\Variables\Server.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
