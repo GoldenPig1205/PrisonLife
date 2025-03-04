@@ -25,7 +25,7 @@ namespace PrisonLife.EventHandlers
             ev.IsAllowed = false;
         }
 
-        public static void OnPlacingBlood(PlacingBloodEventArgs ev)
+        public static void OnPlacingBlood(Blood ev)
         {
             ev.IsAllowed = false;
         }
